@@ -1,8 +1,8 @@
 {
   "path": [
     "./**/*.{ts,tsx}",
-    "../frontend/src/lib/sanity/queries.ts"
+    "../frontend/src/base/lib/sanity/queries.ts"
   ],
   "schema:": "schema.json",
-  "generates": "../frontend/src/lib/sanity/types.ts"
+  "generates": "../frontend/src/base/lib/sanity/types.ts"
 }
