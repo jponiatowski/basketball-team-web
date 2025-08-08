@@ -10,11 +10,7 @@ export const footerType = defineType({
       title: 'Logo',
       type: 'image',
     }),
-    defineField({
-      name: 'title',
-      title: 'Tytuł',
-      type: 'string',
-    }),
+
     defineField({
       name: 'items',
       title: 'Grupy linków',

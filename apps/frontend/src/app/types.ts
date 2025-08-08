@@ -47,7 +47,6 @@ export interface FooterItem {
 }
 
 export interface FooterData {
-  title: string;
   logo: Image;
   items: FooterItem[];
 }

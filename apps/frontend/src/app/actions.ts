@@ -87,7 +87,6 @@ export const getFooter = async (): Promise<FooterData> => {
   };
 
   return {
-    title: footer.data?.title || '',
     logo: imageResolver(footer.data?.logo),
     items:
       footer.data?.items?.map((item) => ({
