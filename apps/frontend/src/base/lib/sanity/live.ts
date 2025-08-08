@@ -1,6 +1,6 @@
 import { defineLive } from "next-sanity";
-import { client } from "@/lib/sanity/client";
-import { token } from "@/lib/sanity/token";
+import { client } from "@/base/lib/sanity/client";
+import { token } from "@/base/lib/sanity/token";
 
 /**
  * Use defineLive to enable automatic revalidation and refreshing of your fetched content
