@@ -6,42 +6,20 @@ export const footerType = defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'logo',
-      title: 'Logo',
-      type: 'image',
+      name: 'title',
+      title: 'Tytuł',
+      type: 'string',
     }),
-
     defineField({
-      name: 'items',
-      title: 'Grupy linków',
-      type: 'array',
-      validation: (Rule) => Rule.max(4),
-      of: [
-        {
-          name: 'link',
-          title: 'Link',
-          type: 'object',
-          fields: [
-            {name: 'title', title: 'Tytuł', type: 'string'},
-            {
-              name: 'links',
-              title: 'Linki',
-              type: 'array',
-              of: [
-                {
-                  name: 'link',
-                  title: 'Link',
-                  type: 'object',
-                  fields: [
-                    {name: 'label', title: 'Tytuł', type: 'string'},
-                    {name: 'link', title: 'Link', type: 'link'},
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
+      name: 'footerCopyright',
+      title: 'Prawa autorskie',
+      type: 'blockContent',
+    }),
+    defineField({
+      name: 'socialMediaLinks',
+      title: 'Linki do Mediów Społecznościowych',
+      type: 'reference',
+      to: [{type: 'socialMedia'}],
     }),
   ],
 })

@@ -49,5 +49,3 @@ export const HeaderMobileSubmenu: FC<HeaderMobileSubmenuProps> = ({
     </Collapsible.Root>
   );
 };
-
-

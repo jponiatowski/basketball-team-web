@@ -32,21 +32,26 @@ export interface Sponsor {
   type: SponsorType;
   name: string;
   link: Link;
-  image_white: Image;
-  image_color: Image;
+  image: Image;
 }
 
-export interface FooterLink {
-  label: string;
+export interface SponsorsData {
+  strategicSponsors?: Sponsor[];
+  titleSponsors?: Sponsor[];
+  partnerSponsors?: Sponsor[];
+}
+
+export interface SocialMediaItem {
+  media: string;
   link: Link;
 }
 
-export interface FooterItem {
+export interface SocialMediaLinks {
   title: string;
-  links: FooterLink[];
+  items: SocialMediaItem[];
 }
 
 export interface FooterData {
-  logo: Image;
-  items: FooterItem[];
+  footerCopyright: any; // blockContent from Sanity
+  socialMediaLinks: SocialMediaLinks;
 }

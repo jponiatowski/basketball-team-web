@@ -56,19 +56,7 @@ export type Sponsor = {
   type?: 'strategic' | 'title' | 'partner';
   name?: string;
   link?: Link;
-  image_white?: {
-    asset?: {
-      _ref: string;
-      _type: 'reference';
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: 'image';
-  };
-  image_color?: {
+  image?: {
     asset?: {
       _ref: string;
       _type: 'reference';
@@ -175,28 +163,27 @@ export type Footer = {
   _createdAt: string;
   _updatedAt: string;
   _rev: string;
-  logo?: {
-    asset?: {
-      _ref: string;
-      _type: 'reference';
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: 'image';
-  };
   title?: string;
-  items?: Array<{
-    title?: string;
-    links?: Array<{
-      label?: string;
-      link?: Link;
-      _type: 'link';
-      _key: string;
-    }>;
-    _type: 'link';
+  footerCopyright?: BlockContent;
+  socialMediaLinks?: {
+    _ref: string;
+    _type: 'reference';
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: 'socialMedia';
+  };
+};
+
+export type SocialMedia = {
+  _id: string;
+  _type: 'socialMedia';
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  socialMediaLinks?: Array<{
+    media?: 'facebook' | 'instagram' | 'youtube' | 'linkedin' | 'tiktok' | 'x';
+    link?: Link;
+    _type: 'socialMediaItem';
     _key: string;
   }>;
 };
@@ -424,6 +411,7 @@ export type AllSanitySchemaTypes =
   | Category
   | Author
   | Footer
+  | SocialMedia
   | Navigation
   | Link
   | Page
@@ -543,7 +531,7 @@ export type HeaderQueryResult = {
   } | null;
 } | null;
 // Variable: sponsorsQuery
-// Query: *[_type == "sponsor"] {  type,  name,  link {    _type,    text,    type,    internalLink-> {      slug    },    url,    email,    phone,    value,    blank,    parameters,    anchor  },  image_white {    asset-> {      url,      ...metadata {        lqip      }    }  },  image_color {    asset-> {      url,      ...metadata {        lqip      }    }  }}
+// Query: *[_type == "sponsor"] {  type,  name,   link {    _type,    text,    type,    internalLink-> {      slug    },    url,    email,    phone,    value,    blank,    parameters,    anchor},  image {    asset-> {      url,      ...metadata {        lqip      }    }  },}
 export type SponsorsQueryResult = Array<{
   type: 'partner' | 'strategic' | 'title' | null;
   name: string | null;
@@ -562,18 +550,7 @@ export type SponsorsQueryResult = Array<{
     parameters: string | null;
     anchor: string | null;
   } | null;
-  image_white: {
-    asset:
-      | {
-          url: string | null;
-          lqip: string | null;
-        }
-      | {
-          url: string | null;
-        }
-      | null;
-  } | null;
-  image_color: {
+  image: {
     asset:
       | {
           url: string | null;
@@ -586,25 +563,20 @@ export type SponsorsQueryResult = Array<{
   } | null;
 }>;
 // Variable: footerQuery
-// Query: *[_type == "footer"][0] {  title,  logo {    asset-> {      url,      ...metadata {        lqip      }    }  },  items[] {    _type == "link" => {      _type,      title,      links[] {        label,        link {          _type,          text,          type,          internalLink-> {            slug          },          url,          email,          phone,          value,          blank,          parameters,          anchor        }      }    }  }}
+// Query: *[_type == "footer"][0] {  footerCopyright,  socialMediaLinks-> {    title,    "items": socialMediaLinks[] {      media,       link {    _type,    text,    type,    internalLink-> {      slug    },    url,    email,    phone,    value,    blank,    parameters,    anchor}    }  }}
 export type FooterQueryResult = {
-  title: string | null;
-  logo: {
-    asset:
-      | {
-          url: string | null;
-          lqip: string | null;
-        }
-      | {
-          url: string | null;
-        }
-      | null;
-  } | null;
-  items: Array<{
-    _type: 'link';
+  footerCopyright: BlockContent | null;
+  socialMediaLinks: {
     title: string | null;
-    links: Array<{
-      label: string | null;
+    items: Array<{
+      media:
+        | 'facebook'
+        | 'instagram'
+        | 'linkedin'
+        | 'tiktok'
+        | 'x'
+        | 'youtube'
+        | null;
       link: {
         _type: 'link';
         text: string | null;
@@ -621,7 +593,7 @@ export type FooterQueryResult = {
         anchor: string | null;
       } | null;
     }> | null;
-  }> | null;
+  } | null;
 } | null;
 
 // Query TypeMap
@@ -630,7 +602,7 @@ declare module '@sanity/client' {
   interface SanityQueries {
     '*[_type == "navigation"][0] {\n  logo,\n  title,\n  items[] {\n    _type == "link" => {\n      _type,\n      label,\n      link {\n        _type,\n        text,\n        type,\n        internalLink-> {\n          slug\n        },\n        url,\n        email,\n        phone,\n        value,\n        blank,\n        parameters,\n        anchor\n      }\n    },\n    _type == "subItems" => {\n      _type,\n      label,\n      items[] {\n        _type == "item" => {\n          _type,\n          label,\n          link {\n            _type,\n            text,\n            type,\n            internalLink-> {\n              slug\n            },\n            url,\n            email,\n            phone,\n            value,\n            blank,\n            parameters,\n            anchor\n          }\n        },\n        _type == "subItems" => {\n          _type,\n          label,\n          items[] {\n            _type,\n            label,\n            link {\n              _type,\n              text,\n              type,\n              internalLink-> {\n                slug\n              },\n              url,\n              email,\n              phone,\n              value,\n              blank,\n              parameters,\n              anchor\n            }\n          }\n        }\n      }\n    }\n  }\n}': NavigationQueryResult;
     '*[_type == "navigation"][0] {\n  title,\n  logo {\n    asset-> {\n      url,\n      ...metadata {\n        lqip\n      }\n    }\n  }\n}': HeaderQueryResult;
-    '*[_type == "sponsor"] {\n  type,\n  name,\n  link {\n    _type,\n    text,\n    type,\n    internalLink-> {\n      slug\n    },\n    url,\n    email,\n    phone,\n    value,\n    blank,\n    parameters,\n    anchor\n  },\n  image_white {\n    asset-> {\n      url,\n      ...metadata {\n        lqip\n      }\n    }\n  },\n  image_color {\n    asset-> {\n      url,\n      ...metadata {\n        lqip\n      }\n    }\n  }\n}': SponsorsQueryResult;
-    '*[_type == "footer"][0] {\n  title,\n  logo {\n    asset-> {\n      url,\n      ...metadata {\n        lqip\n      }\n    }\n  },\n  items[] {\n    _type == "link" => {\n      _type,\n      title,\n      links[] {\n        label,\n        link {\n          _type,\n          text,\n          type,\n          internalLink-> {\n            slug\n          },\n          url,\n          email,\n          phone,\n          value,\n          blank,\n          parameters,\n          anchor\n        }\n      }\n    }\n  }\n}': FooterQueryResult;
+    '*[_type == "sponsor"] {\n  type,\n  name,\n  \n link {\n    _type,\n    text,\n    type,\n    internalLink-> {\n      slug\n    },\n    url,\n    email,\n    phone,\n    value,\n    blank,\n    parameters,\n    anchor\n}\n,\n  image {\n    asset-> {\n      url,\n      ...metadata {\n        lqip\n      }\n    }\n  },\n}': SponsorsQueryResult;
+    '*[_type == "footer"][0] {\n  footerCopyright,\n  socialMediaLinks-> {\n    title,\n    "items": socialMediaLinks[] {\n      media,\n      \n link {\n    _type,\n    text,\n    type,\n    internalLink-> {\n      slug\n    },\n    url,\n    email,\n    phone,\n    value,\n    blank,\n    parameters,\n    anchor\n}\n\n    }\n  }\n}': FooterQueryResult;
   }
 }

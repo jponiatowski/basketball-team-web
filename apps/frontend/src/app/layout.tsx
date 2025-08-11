@@ -5,7 +5,7 @@ import { Theme } from '@radix-ui/themes';
 
 import './globals.css';
 import '@radix-ui/themes/styles.css';
-import { Footer } from './components/footer/footer';
+import { Footer } from './components/footer';
 
 const inter = Inter({
   variable: '--font-inter',

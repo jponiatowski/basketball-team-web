@@ -37,13 +37,9 @@ export default defineType({
       type: 'link',
     }),
     defineField({
-      name: 'image_white',
-      title: 'Logo białe',
-      type: 'image',
-    }),
-    defineField({
-      name: 'image_color',
-      title: 'Logo kolorowe',
+      name: 'image',
+      title: 'Logo',
+      description: 'Logo w kolorze białym',
       type: 'image',
     }),
   ],

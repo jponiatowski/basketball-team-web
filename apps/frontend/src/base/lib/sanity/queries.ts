@@ -1,4 +1,5 @@
 import { groq } from 'next-sanity';
+import { LINK_FRAGMENT } from './fragments';
 
 export const navigationQuery = groq`*[_type == "navigation"][0] {
   logo,
@@ -89,22 +90,8 @@ export const headerQuery = groq`*[_type == "navigation"][0] {
 export const sponsorsQuery = groq`*[_type == "sponsor"] {
   type,
   name,
-  link {
-    _type,
-    text,
-    type,
-    internalLink-> {
-      slug
-    },
-    url,
-    email,
-    phone,
-    value,
-    blank,
-    parameters,
-    anchor
-  },
-  image_white {
+  ${LINK_FRAGMENT},
+  image {
     asset-> {
       url,
       ...metadata {
@@ -112,47 +99,15 @@ export const sponsorsQuery = groq`*[_type == "sponsor"] {
       }
     }
   },
-  image_color {
-    asset-> {
-      url,
-      ...metadata {
-        lqip
-      }
-    }
-  }
 }`;
 
 export const footerQuery = groq`*[_type == "footer"][0] {
-  logo {
-    asset-> {
-      url,
-      ...metadata {
-        lqip
-      }
-    }
-  },
-  items[] {
-    _type == "link" => {
-      _type,
-      title,
-      links[] {
-        label,
-        link {
-          _type,
-          text,
-          type,
-          internalLink-> {
-            slug
-          },
-          url,
-          email,
-          phone,
-          value,
-          blank,
-          parameters,
-          anchor
-        }
-      }
+  footerCopyright,
+  socialMediaLinks-> {
+    title,
+    "items": socialMediaLinks[] {
+      media,
+      ${LINK_FRAGMENT}
     }
   }
 }`;

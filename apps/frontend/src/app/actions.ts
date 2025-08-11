@@ -17,6 +17,7 @@ import {
   HeaderData,
   NavigationData,
   Sponsor,
+  SponsorsData,
   SponsorType,
 } from './types';
 
@@ -55,28 +56,48 @@ export const getHeader = async (): Promise<HeaderData> => {
   })) as {
     data: HeaderQueryResult | null;
   };
-  console.log('header', header);
+
   return {
     logo: header.data?.logo?.asset?.url,
     title: header.data?.title,
   };
 };
 
-export const getSponsors = async (): Promise<Sponsor[]> => {
+export const getSponsors = async (): Promise<SponsorsData> => {
   const sponsors = (await sanityFetch({
     query: sponsorsQuery,
   })) as {
     data: SponsorsQueryResult | null;
   };
-  return (
-    sponsors.data?.map((sponsor) => ({
-      type: sponsor.type as SponsorType,
-      name: sponsor.name || '',
-      link: linkResolver(sponsor?.link),
-      image_white: imageResolver(sponsor.image_white),
-      image_color: imageResolver(sponsor.image_color),
-    })) || []
+
+  const strategicSponsors = sponsors.data?.filter(
+    (sponsor) => sponsor.type === 'strategic'
   );
+
+  const titleSponsors = sponsors.data?.filter(
+    (sponsor) => sponsor.type === 'title'
+  );
+
+  const partnerSponsors = sponsors.data?.filter(
+    (sponsor) => sponsor.type === 'partner'
+  );
+
+  const resolveSponsors = (sponsors: SponsorsQueryResult | undefined) => {
+    return sponsors?.map((sponsor) => {
+      return {
+        type: sponsor.type as SponsorType,
+        name: sponsor.name || '',
+        link: linkResolver(sponsor?.link),
+        image: imageResolver(sponsor?.image),
+      };
+    });
+  };
+
+  return {
+    strategicSponsors: resolveSponsors(strategicSponsors),
+    titleSponsors: resolveSponsors(titleSponsors),
+    partnerSponsors: resolveSponsors(partnerSponsors),
+  };
 };
 
 export const getFooter = async (): Promise<FooterData> => {
@@ -87,17 +108,14 @@ export const getFooter = async (): Promise<FooterData> => {
   };
 
   return {
-    logo: imageResolver(footer.data?.logo),
-    items:
-      footer.data?.items?.map((item) => ({
-        title: item._type === 'link' ? item.title || '' : '',
-        links:
-          item._type === 'link' && item.links
-            ? item.links.map((linkItem) => ({
-                label: linkItem.label || '',
-                link: linkResolver(linkItem.link),
-              }))
-            : [],
-      })) || [],
+    footerCopyright: footer.data?.footerCopyright || null,
+    socialMediaLinks: {
+      title: footer.data?.socialMediaLinks?.title || '',
+      items:
+        footer.data?.socialMediaLinks?.items?.map((item) => ({
+          media: item.media || '',
+          link: linkResolver(item.link),
+        })) || [],
+    },
   };
 };
