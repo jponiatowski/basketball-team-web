@@ -4,11 +4,11 @@ import { cn } from '@/base/utils';
 import { DropdownMenu, Flex, Link } from '@radix-ui/themes';
 import { FC, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
-import { NavigationSubItem } from '@/app/types';
+import { NavigationItem } from '@/app/types';
 
 interface HeaderDropdownProps {
   children: React.ReactNode;
-  items: NavigationSubItem[];
+  items: NavigationItem[];
 }
 
 export const HeaderDropdown: FC<HeaderDropdownProps> = ({
@@ -41,8 +41,34 @@ export const HeaderDropdown: FC<HeaderDropdownProps> = ({
         variant="soft"
       >
         {items.map((item) => {
-          if (!item.link) {
-            return null;
+          if (item?.items?.length && item.items.length > 0) {
+            return (
+              <DropdownMenu.Sub>
+                <DropdownMenu.SubTrigger>
+                  <span>{item.label}</span>
+                </DropdownMenu.SubTrigger>
+
+                <DropdownMenu.SubContent key={item.label} sideOffset={10}>
+                  {item.items?.map((subItem) => (
+                    <DropdownMenu.Item
+                      key={item.label}
+                      className="w-32 max-w-40 hover:bg-gray-100"
+                    >
+                      <Link
+                        href={subItem?.link?.url || ''}
+                        target={subItem?.link?.target}
+                        className={cn(
+                          'truncate !text-gray-900 hover:text-gray-100',
+                          '!w-full'
+                        )}
+                      >
+                        {subItem.label}
+                      </Link>
+                    </DropdownMenu.Item>
+                  ))}
+                </DropdownMenu.SubContent>
+              </DropdownMenu.Sub>
+            );
           }
 
           return (
@@ -51,8 +77,8 @@ export const HeaderDropdown: FC<HeaderDropdownProps> = ({
               className="w-32 max-w-40 hover:bg-gray-100"
             >
               <Link
-                href={item.link.url}
-                target={item.link.target}
+                href={item.link?.url || ''}
+                target={item.link?.target}
                 className={cn(
                   'truncate !text-gray-900 hover:text-gray-100',
                   '!w-full'

@@ -16,10 +16,39 @@ import {
   FooterData,
   HeaderData,
   NavigationData,
+  NavigationItem,
   Sponsor,
   SponsorsData,
   SponsorType,
 } from './types';
+
+const mapNavigationSubItem = (subItem: any): NavigationItem => {
+  return {
+    label: subItem.label,
+    type: subItem._type,
+    link:
+      subItem._type === 'item' && subItem.link
+        ? linkResolver(subItem.link)
+        : undefined,
+    items:
+      subItem._type === 'subItems'
+        ? subItem.items?.map(mapNavigationSubItem)
+        : undefined,
+  };
+};
+
+const mapNavigationItem = (item: any): NavigationItem => {
+  return {
+    label: item.label,
+    type: item._type,
+    link:
+      item._type === 'link' && item.link ? linkResolver(item.link) : undefined,
+    items:
+      item._type === 'subItems'
+        ? item.items?.map(mapNavigationSubItem)
+        : undefined,
+  };
+};
 
 export const getNavigation = async (): Promise<NavigationData> => {
   const navigation = (await sanityFetch({
@@ -29,24 +58,7 @@ export const getNavigation = async (): Promise<NavigationData> => {
   };
 
   return {
-    items: navigation.data?.items?.map((item) => ({
-      label: item.label,
-      type: item._type,
-      link:
-        item._type === 'link' && item.link
-          ? linkResolver(item.link)
-          : undefined,
-      items:
-        item._type === 'subItems'
-          ? item.items?.map((subItem) => ({
-              label: subItem.label,
-              link:
-                subItem._type === 'item' && subItem.link
-                  ? linkResolver(subItem.link)
-                  : undefined,
-            }))
-          : undefined,
-    })),
+    items: navigation.data?.items?.map(mapNavigationItem),
   };
 };
 

@@ -5,16 +5,11 @@ export interface NavigationLink {
   target: string;
 }
 
-export interface NavigationSubItem {
-  label: string | null;
-  link?: NavigationLink;
-}
-
 export interface NavigationItem {
   label: string | null;
   type: string;
   link?: NavigationLink;
-  items?: NavigationSubItem[];
+  items?: NavigationItem[];
 }
 
 export interface NavigationData {

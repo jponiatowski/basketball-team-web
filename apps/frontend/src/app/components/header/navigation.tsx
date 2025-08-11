@@ -6,7 +6,7 @@ import { HeaderMobileMenu } from './header-mobile-menu';
 
 export const Navigation = async () => {
   const navigation = await getNavigation();
-
+  console.log('__NAVIGATION__', navigation);
   return (
     <>
       <HeaderMobileMenu items={navigation.items ?? []} />

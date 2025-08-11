@@ -72,15 +72,42 @@ export const HeaderMobileMenu: FC<HeaderMobileMenuProps> = ({ items }) => {
                   <ChevronDown className="transition-transform group-data-[state=open]:rotate-180" />
                 </Collapsible.Trigger>
                 <Collapsible.Content className="collapsible-content bg-primary-700 ml-3 w-full p-2">
-                  {item.items?.map((subItem) => (
-                    <Link
-                      key={subItem.label}
-                      href={subItem.link?.url || ''}
-                      className="block w-full truncate p-3 text-white"
-                    >
-                      {subItem.label}
-                    </Link>
-                  ))}
+                  {item.items?.map((subItem) => {
+                    if (subItem.type === 'subItems') {
+                      return (
+                        <Collapsible.Root>
+                          <Collapsible.Trigger className="group flex w-full items-center justify-between p-4 text-white">
+                            <span>{subItem.label}</span>
+                            <ChevronDown className="transition-transform group-data-[state=open]:rotate-180" />
+                          </Collapsible.Trigger>
+                          <Collapsible.Content className="collapsible-content bg-primary-700 ml-3 w-full p-2">
+                            {subItem.items?.map((subSubItem) => {
+                              return (
+                                <Link
+                                  key={subSubItem.label}
+                                  href={subSubItem.link?.url || ''}
+                                  className="block w-full truncate p-3 text-white"
+                                  onClick={handleClose}
+                                >
+                                  {subSubItem.label}
+                                </Link>
+                              );
+                            })}
+                          </Collapsible.Content>
+                        </Collapsible.Root>
+                      );
+                    }
+
+                    return (
+                      <Link
+                        key={subItem.label}
+                        href={subItem.link?.url || ''}
+                        className="block w-full truncate p-3 text-white"
+                      >
+                        {subItem.label}
+                      </Link>
+                    );
+                  })}
                 </Collapsible.Content>
               </Collapsible.Root>
             );
