@@ -774,6 +774,16 @@ export type TeamSeoQueryResult = {
     } | null;
   } | null;
 } | null;
+// Variable: tablePageQuery
+// Query: *[_type == "team" && slug.current == $slug][0] {  name,  slug,  esorData {    leagueId,    teamId  }}
+export type TablePageQueryResult = {
+  name: string;
+  slug: Slug;
+  esorData: {
+    leagueId: string | null;
+    teamId: string | null;
+  } | null;
+} | null;
 
 // Query TypeMap
 import '@sanity/client';
@@ -785,5 +795,6 @@ declare module '@sanity/client' {
     '*[_type == "footer"][0] {\n  footerCopyright,\n  socialMediaLinks-> {\n    title,\n    "items": socialMediaLinks[] {\n      media,\n      \n link {\n    _type,\n    text,\n    type,\n    internalLink-> {\n      slug\n    },\n    url,\n    email,\n    phone,\n    value,\n    blank,\n    parameters,\n    anchor\n}\n\n    }\n  }\n}': FooterQueryResult;
     '*[_type == "team" && slug.current == $slug][0] {\n  _id,\n  name,\n  slug,\n  image {\n    asset-> {\n      url,\n      ...metadata {\n        lqip\n      }\n    }\n  },\n  coach[]-> {\n    _id,\n    name,\n    slug,\n    image {\n      asset-> {\n        url,\n        ...metadata {\n          lqip\n        }\n      }\n    }\n  },\n  practice[] {\n    day,\n    details[] {\n      time,\n      place\n    }\n  },\n  esorData {\n    leagueId,\n    teamId\n  },\n}': TeamQueryResult;
     '*[_type == "team" && slug.current == $slug][0] {\n  seo {\n    title,\n    description,\n    image {\n      asset-> {\n        url\n      }\n    }\n  }\n}': TeamSeoQueryResult;
+    '*[_type == "team" && slug.current == $slug][0] {\n  name,\n  slug,\n  esorData {\n    leagueId,\n    teamId\n  }\n}': TablePageQueryResult;
   }
 }

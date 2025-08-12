@@ -7,7 +7,9 @@ export type FunctionName =
   | 'getPlayer'
   | 'getPlayerStatistics'
   | 'getLeagueTable'
-  | 'getAllLeagues';
+  | 'getAllLeagues'
+  | 'getRounds'
+  | 'getGroups';
 
 export type EsorId = number | string;
 
@@ -79,4 +81,19 @@ export interface EsorLeagueTableItem {
   por: number;
   pkt: number;
   stoszdstr: number;
+}
+
+export interface EsorRound {
+  id: EsorId;
+  nazwa: string;
+  nazwaskrocona: string;
+}
+
+export interface EsorGroup {
+  id: EsorId;
+  nazwa: string;
+}
+
+export interface EsorAllGroups {
+  grupy: EsorGroup[];
 }

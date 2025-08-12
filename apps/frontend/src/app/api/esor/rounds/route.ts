@@ -5,18 +5,13 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const leagueId = searchParams.get('leagueId');
 
-  const groupId = searchParams.get('groupId');
-
   if (!leagueId) {
     return NextResponse.json({ error: 'Missing leagueId' }, { status: 400 });
   }
 
   const season = await esorClient.getCurrentSeason();
 
-  const teams = await esorClient.getTeams(
-    leagueId,
-    season.id,
-    groupId ?? undefined
-  );
-  return NextResponse.json(teams);
+  const rounds = await esorClient.getRounds(leagueId, '27');
+  console.log(rounds);
+  return NextResponse.json(rounds);
 }

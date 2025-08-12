@@ -3,15 +3,19 @@ import {
   LeagueTableItem,
   Player,
   PlayerStatistics,
+  Round,
   Season,
   Team,
+  Group,
 } from '@/base/types';
 import {
   EsorAllLeagues,
+  EsorAllGroups,
   EsorLeague,
   EsorLeagueTableItem,
   EsorPlayer,
   EsorPlayerStatistics,
+  EsorRound,
   EsorSeason,
   EsorTeam,
   EsorTeams,
@@ -93,10 +97,15 @@ class EsorClient {
     };
   }
 
-  async getTeams(leagueId: string, seasonId: string): Promise<Team[]> {
+  async getTeams(
+    leagueId: string,
+    seasonId: string,
+    groupId?: string
+  ): Promise<Team[]> {
     const esorData = await this.transport.call<EsorTeams>('getTeams', {
       leagueid: leagueId,
       seasonid: seasonId,
+      groupid: groupId,
     });
 
     return Object.values(esorData).map((team) => ({
@@ -158,23 +167,58 @@ class EsorClient {
 
   async getLeagueTable(
     leagueId: string,
-    seasonId: string
+    seasonId: string,
+    groupId?: string
   ): Promise<LeagueTableItem[]> {
     const esorData = await this.transport.call<EsorLeagueTableItem[]>(
       'getLeagueTable',
       {
         leagueid: leagueId,
         seasonid: seasonId,
+        groupid: groupId,
       }
     );
-    return esorData.map((item) => ({
-      name: item.nazwa,
-      shortName: item.skrocona,
-      teamId: item.teamid?.toString(),
-      gamesNumber: item.mecze,
-      wins: item.zw,
-      losses: item.por,
-      points: item.pkt,
+
+    return esorData
+      .map((item) => ({
+        name: item.nazwa,
+        shortName: item.skrocona,
+        teamId: item.teamid?.toString(),
+        gamesNumber: item.mecze,
+        wins: item.zw,
+        losses: item.por,
+        points: item.pkt,
+      }))
+      .sort((a, b) => b.points - a.points);
+  }
+
+  async getRounds(leagueId: string, seasonId: string): Promise<Round[]> {
+    const esorData = await this.transport.call<EsorRound[]>('getRounds', {
+      leagueid: leagueId,
+      seasonid: seasonId,
+    });
+
+    return esorData.map((round) => ({
+      id: round.id?.toString(),
+      name: round.nazwa,
+      shortName: round.nazwaskrocona,
+    }));
+  }
+
+  async getGroups(
+    leagueId: string,
+    seasonId: string,
+    roundId?: string
+  ): Promise<Group[]> {
+    const esorData = await this.transport.call<EsorAllGroups>('getGroups', {
+      leagueid: leagueId,
+      seasonid: seasonId,
+      roundid: roundId,
+    });
+
+    return esorData.grupy.map((group) => ({
+      id: group.id?.toString(),
+      name: group.nazwa,
     }));
   }
 

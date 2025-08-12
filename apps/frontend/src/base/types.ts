@@ -72,3 +72,14 @@ export interface LeagueTableItem {
   losses: number;
   points: number;
 }
+
+export interface Round {
+  id: string;
+  name: string;
+  shortName: string;
+}
+
+export interface Group {
+  id: string;
+  name: string;
+}

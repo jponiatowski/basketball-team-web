@@ -66,6 +66,8 @@ export default defineType({
       type: 'object',
       fields: [
         {name: 'leagueId', title: 'Liga', type: 'string'},
+        {name: 'roundId', title: 'Runda', type: 'string'},
+        {name: 'groupId', title: 'Grupa', type: 'string'},
         {name: 'teamId', title: 'Drużyna', type: 'string'},
       ],
       components: {
