@@ -172,3 +172,10 @@ export const tablePageQuery = groq`*[_type == "team" && slug.current == $slug][0
     roundId
   }
 }`;
+
+export const tablePageSeoQuery = groq`*[_type == "team" && slug.current == $slug][0] {
+  name,
+  esorData {
+    leagueId,
+  }
+}`;

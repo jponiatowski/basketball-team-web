@@ -2159,6 +2159,20 @@
               },
               "optional": true
             },
+            "roundId": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "string"
+              },
+              "optional": true
+            },
+            "groupId": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "string"
+              },
+              "optional": true
+            },
             "teamId": {
               "type": "objectAttribute",
               "value": {

@@ -1,17 +1,39 @@
 import { Heading, Table } from '@radix-ui/themes';
-import { getTeamTablePageData } from './actions';
+import { getTeamSeoData, getTeamTablePageData } from './actions';
 import { cn } from '@/base/utils';
+import { Metadata } from 'next';
+import { CLUB_NAME } from '@/base/constants';
+import { Breadcrumbs } from '@/base/components/breadcrumbs';
 
-export default async function TabelaPage({
-  params,
-}: {
+type TablePageProps = {
   params: Promise<{ slug: string }>;
-}) {
+};
+
+export async function generateMetadata({
+  params,
+}: TablePageProps): Promise<Metadata> {
+  const slug = (await params).slug;
+  const seo = await getTeamSeoData(slug);
+
+  return {
+    title: `Tabela - ${seo.leagueName} (${seo.name}) - ${CLUB_NAME}`,
+    description: `Aktualna tabela ligi ${seo.leagueName} (${seo.name}) klubu ${CLUB_NAME}. Sprawdź pozycje drużyn, liczbę punktów, bilans meczów oraz wyniki.`,
+  };
+}
+
+export default async function TabelaPage({ params }: TablePageProps) {
   const { slug } = await params;
   const data = await getTeamTablePageData(slug);
 
   return (
     <div className="flex flex-col gap-8">
+      <Breadcrumbs
+        items={[
+          { label: 'Strona główna', href: '/' },
+          { label: data.team.name ?? 'Drużyna', href: `/druzyny/${slug}` },
+          { label: 'Tabela', current: true },
+        ]}
+      />
       <Heading as="h1" size="8">
         Tabela
       </Heading>
