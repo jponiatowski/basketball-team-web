@@ -21,6 +21,8 @@ import {
   SponsorsData,
   SponsorType,
 } from './types';
+import { esorClient } from '@/base/lib/esor/client';
+import { Season } from '@/base/types';
 
 const mapNavigationSubItem = (subItem: any): NavigationItem => {
   return {
@@ -130,4 +132,9 @@ export const getFooter = async (): Promise<FooterData> => {
         })) || [],
     },
   };
+};
+
+export const getSeason = async (): Promise<Season> => {
+  const season = await esorClient.getCurrentSeason();
+  return season;
 };

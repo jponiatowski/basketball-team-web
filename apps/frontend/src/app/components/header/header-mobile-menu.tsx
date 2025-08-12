@@ -76,7 +76,7 @@ export const HeaderMobileMenu: FC<HeaderMobileMenuProps> = ({ items }) => {
                     if (subItem.type === 'subItems') {
                       return (
                         <Collapsible.Root>
-                          <Collapsible.Trigger className="group flex w-full items-center justify-between p-4 text-white">
+                          <Collapsible.Trigger className="group flex w-full items-center justify-between p-3 text-white">
                             <span>{subItem.label}</span>
                             <ChevronDown className="transition-transform group-data-[state=open]:rotate-180" />
                           </Collapsible.Trigger>

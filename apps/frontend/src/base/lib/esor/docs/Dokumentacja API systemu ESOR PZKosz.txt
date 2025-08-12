@@ -1,0 +1,542 @@
+Dokumentacja API systemu ESOR PZKosz
+
+I. Wstęp
+
+System ESOR umożliwia współpracę z serwisami zewnętrznymi poprzez wywołania funkcji przygotowanych dla API systemu. Dostęp do mechanizmu możliwy jest przy podaniu klucza API wygenerowanego dla poziomu dostępu danej witryny.
+
+II. Wywołanie
+
+Funkcje API wywoływane są przez podanie odpowiednich parametrów metodą POST protokołem HTTP.
+Adres wywołania funkcji to:
+  https://esor.pzkosz.pl/api/
+
+parametry wywołania funkcji wysyłane metodą POST to:
+  key=<klucz api>&function=<nazwa_funkcji>[&<parametrX>=<wartośćX>]
+
+III. Opis prszeglądu funkcji
+
+IV. Funkcje API
+
+1. getCurrentSeason
+  a) wywołanie:
+    function=getCurrentSeason
+  b) parametry:
+    brak
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca:
+    id - Identyfikator aktualnego sezonu
+    nazwa - Nazwa aktualnego sezonu (np 2011/2012)
+    skrocona - Nazwa skrocona aktualnego sezonu (np 2011)
+    pos - pozycja sezonu w bazie
+    Pozostałe parametry są nieobsługiwane bądź redundantne. 
+  d) opis - funkcja zwraca dane aktywnego sezonu rozgrywek
+
+2. getAllSeasons
+  a) wywołanie:
+    function=getAllSeasons
+  b) parametry:
+    brak
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca:
+    listę sezonów, posortowanych od najstarszego, każdy sezon zawiera informacje:
+      id - Identyfikator sezonu
+      nazwa - Nazwa sezonu (np 2011/2012)
+      skrocona - Nazwa skrocona sezonu (np 2011)
+      pos - pozycja sezonu w bazie
+      Pozostałe parametry są nieobsługiwane bądź redundantne. 
+  d) opis - funkcja zwraca dane wszystkich dostępnych sezonów rozgrywek
+
+3. getAllLeagues
+  a) wywołanie:
+    function=getAllLeagues
+  b) parametry:
+    brak
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca:
+    listę lig, każda liga zawiera informacje:
+      id - Identyfikator aktualnej ligi
+      nazwa - Nazwa ligi (np 2 Liga Męska, grupa A)
+      skrocona - Nazwa skrocona ligi (np 2 Liga Mężczyzn)
+      skrot - Skrót nazwy (np 2LM A)
+      typ - identyfikator typu ligi w ESOR
+      pos - pozycja ligi w ESOR dla identyfikatora ligi
+      Pozostałe parametry są nieobsługiwane bądź redundantne. 
+  d) opis - funkcja zwraca dane wszystkich dostępnych lig
+
+4. getTeams
+  a) wywołanie:
+    function=getTeams
+  b) parametry:
+    [leagueid] - numer ID ligi,
+    [seasonid] - numer ID sezonu,
+    [groupid] - ID grupy
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca:
+    listę drużyn, każda drużyna zawiera informacje:
+      id - Identyfikator drużyny
+      nazwa - Nazwa drużyny (jeśli podano seasonid - w danym sezonie)
+      skrocona - Nazwa skrocona drużyny (jeśli podano seasonid - w danym sezonie)
+      logo - odnośnik do logo drużyny (max 50x50px), lub puste jeśli brak logo
+      klubid - identyfikator klubu, do którego należy drużyna
+    Pozostałe parametry są nieobsługiwane bądź redundantne. 
+  d) opis - funkcja zwraca dane wszystkich drużyn; jeśli podano parametr leagueid - w danej lidze, jeśli podano parametr seasonid - w danym sezonie
+
+5. getTeam
+  a) wywołanie:
+    function=getTeam
+  b) parametry:
+    teamid - numer ID drużyny,
+    [seasonid] - numer ID sezonu,
+    [leagueid] - numer ID ligi,
+    [seasonid] - numer ID sezonu,
+    [logow] - szerokość logo drużyny w pikselach,
+    [logoh] - wysokość logo drużyny w pikselach,
+    [fotow] - szerokość miniatury zdjęć drużyny w pikselach,
+    [fotoh] - wysokość miniatury zdjęć drużyny w pikselach,
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca:
+      id - Identyfikator drużyny
+      nazwa - Nazwa drużyny (jeśli podano seasonid - w danym sezonie)
+      skrocona - Nazwa skrocona drużyny (jeśli podano seasonid - w danym sezonie)
+      logo - odnośnik do logo drużyny (max 50x50px), lub puste jeśli brak logo
+      klubid - identyfikator klubu, do którego należy drużyna
+      adres - adres,
+      kodpocztowy - kod pocztowy,
+      miasto - miasto,
+      email - adres e-mail drużyny,
+      www - strona internetowa drużyny
+      telefon - telefon do drużyny,
+      fax - fax do drużyny,
+      hale - tablica identyfikatorów hal przypisanych do drużyny,
+      trenerzy - tablica (imię, nazwisko, funkcja) trenerów drużyny,
+      trenerzy_odeszli - tablica (imię, nazwisko, data1 (yyyy-mm-dd), data2 (dd.mm.yyyy)) trenerów, którzy odeszli z datą [data1/data2],
+      zawodnicy_odeszli - tablica (imię, nazwisko, data1 (yyyy-mm-dd), data2 (dd.mm.yyyy)) zawodników, którzy odeszli z datą [data1/data2],
+      sponsorzy - tablica (nazwa, link, logo) sponsorów drużyny,
+      fotodruzyny - tablica (thumbnail, original, position) fotografii drużyny,
+    Pozostałe parametry są nieobsługiwane bądź redundantne. 
+  d) opis - funkcja zwraca szczegółowe dane dotyczące drużyny
+
+6. getSeason
+  a) wywołanie:
+    function=getSeason
+  b) parametry:
+    seasonid - numer ID sezonu
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca:
+      id - Identyfikator sezonu
+      nazwa - Nazwa sezonu (np 2011/2012)
+      skrocona - Nazwa skrocona sezonu (np 2011)
+      pos - pozycja sezonu w bazie
+    Pozostałe parametry są nieobsługiwane bądź redundantne. 
+  d) opis - funkcja zwraca dane sezonu rozgrywek na podstawie podanego identyfikatora
+
+7. getLeague
+  a) wywołanie:
+    function=getLeague
+  b) parametry:
+    leagueid - numer ID ligi
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca:
+      id - Identyfikator aktualnej ligi
+      nazwa - Nazwa ligi (np 2 Liga Męska, grupa A)
+      skrocona - Nazwa skrocona ligi (np 2 Liga Mężczyzn)
+      skrot - Skrót nazwy (np 2LM A)
+      typ - identyfikator typu ligi w ESOR
+      pos - pozycja ligi w ESOR dla identyfikatora ligi
+    Pozostałe parametry są nieobsługiwane bądź redundantne. 
+  d) opis - funkcja zwraca dane sezonu rozgrywek na podstawie podanego identyfikatora
+
+8. getTimetable
+  a) wywołanie:
+    function=getTimetable
+  b) parametry:
+    leagueid - numer ID ligi
+    seasonid - ID sezonu
+    [home] - identyfikator drużyny gospodaży
+    [visitor] - identyfikator drużyny gości
+    [team] - identyfikator drużyny gości lub gospodaży
+    [round] - identyfikator rundy
+    [line] - identyfikator kolejki
+    [groupid] - opcjonalnie - ID grupy
+    [limit] - limit wyników na stronie (jeśli pusty lub >2000 limit=2000)
+    [page] - strona
+    [dateFrom] - pokazuje terminarz od tej daty (RRRR-MM-DD)
+    [dateTo] - pokazuje terminarz do tej daty (RRRR-MM-DD)
+    [tv] - tylko mecze w TV
+    [instanceid] - tylko mecze z druzynami z wojewodztwa danej instancji
+    [districtid] - tylko mecze z druzynami z danego wojewodztwa
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca:
+      cnt - Ilość wszystkich rekordów spełniających warunki
+      page - aktualna strona wyników
+      ilestron - ilość stron wyników (ceil(cnt/limit))
+      items - pełne informacje o meczach, najważniejsze z nich:
+          nrmeczu - numer meczu
+          data - Data i godzina meczu
+          koniec - mecz zakończony (1 - tak, 0 - nie),
+          walkower - mecz zakończony walkowerem (1 - tak, 0 - nie),
+          anulowany - mecz anulowany (1 - tak, 0 - nie),
+          przelozony - mecz przełożony (1 - tak, 0 - nie),
+          widzowie - ilość widzów,
+          wynik1 - wynik spotkania dla gospodarzy
+          wynik2 - wynik spotkania dla gości
+          kwarta1 - wynik 1 kwarty (gospodaże : goście)
+          kwarta2 - wynik 2 kwarty (gospodaże : goście)
+          kwarta3 - wynik 3 kwarty (gospodaże : goście)
+          kwarta4 - wynik 4 kwarty (gospodaże : goście)
+          dogrywka - wynik dogrywki (gospodaże : goście)
+          rzuty - wynik rzutów (gospodaże : goście)
+          k1 - struktura (ID, nazwa, logo) drużyny gospodaży
+          k1txt - nazwa zastępcza drużyny gospodaży
+          k2 - struktura (ID, nazwa, logo) drużyny gości
+          k2txt - nazwa zastępcza drużyny gości
+          liga - struktura (id, nazwa, nazwa skrócona...) ligi
+          poziom - struktura (id, nazwa) poziomu rozgrywek (rundy)
+          kolejka - struktura (id, nazwa) kolejki rozgrywek
+          hala - struktura (id, nazwa, adres...) hali
+          sedziowie - lista sędziów
+          komisarze - lista komisarzów
+          
+  d) opis - funkcja zwraca terminarz meczów dla danej ligi w danym sezonie
+
+9. getRounds
+  a) wywołanie:
+    function=getRounds
+  b) parametry:
+    leagueid - ID ligi
+    seasonid - ID sezonu
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca tablicę poziomów rozgrywek (rund), gdzie każdy element zawiera:
+      id - ID poziomu ligowego
+      leagueid - ID ligi
+      seasonid - ID sezonu
+      nazwa - nazwa poziomu rozgrywek
+      nazwaskrocona - skrócona nazwa poziomu rozgrywek
+      ilemeczow - ilość spotkań przypisana do danego poziomu w danej lidze, w danym sezonie
+
+  d) opis - funkcja zwraca listę wszystkich poziomów ligowych przypisanych do danej ligi w danym sezonie
+
+10. getLines
+  a) wywołanie:
+    function=getLines
+  b) parametry:
+    leagueid - ID ligi
+    seasonid - ID sezonu
+    [roundid] - ID poziomu rozgrywek (opcjonalny)
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca tablicę kolejek, gdzie każdy element zawiera:
+      id - ID kolejki
+      leagueid - ID ligi
+      seasonid - ID sezonu
+      roundid - ID poziomu rozgrywek
+      nazwa - nazwa kolejki
+      data - data kolejki
+      aktualna - stan kolejki (0 - brak informacji, 1 - aktualna kolejka, 2 - poprzednia kolejka, 3 - następna kolejka;
+                stany 2 i 3 występują, gdy nie podano parametru roundid)
+      ilemeczow - ilość spotkań przypisana do danego poziomu w danej lidze, w danym sezonie i w danej kolejce
+
+  d) opis - funkcja zwraca listę wszystkich kolejek przypisanych do danej ligi w danym sezonie oraz w danej rundzie, jeśli określono
+
+11. getLeaguePlayersAcronyms
+  a) wywołanie:
+    function=getLeaguePlayersAcronyms
+  b) parametry:
+    leagueid - ID ligi
+    seasonid - ID sezonu
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca tablicę akronimów:
+      leagueid - ID ligi
+      seasonid - ID sezonu
+      acornym - Pierwsza litera nazwiska zawodników
+      ilezawodnikow - Ilość zawodników posiadających 1 literę nazwiska taką jak "acronym" w danej lidze, w danym sezonie
+
+  d) opis - funkcja zwraca listę akronimów (tzn. pierwszych liter nazwiska) wraz z liczebnością zawodników dla danej ligi w danym sezonie
+
+12. getLeaguePlayers
+  a) wywołanie:
+    function=getLeaguePlayers
+  b) parametry:
+    leagueid - ID ligi
+    seasonid - ID sezonu
+    [acronym] - pierwsze litery nazwiska zawodnika
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca tablicę zawodników:
+      id - ID zawodnika
+      imie - imię zawodnika
+      nazwisko - nazwisko zawodnika
+      acornym - Pierwsza litera nazwiska zawodników
+      foto - adres URL do zdjęcia zawodnika (jeśli istnieje)
+      data_urodzenia - data urodzenia zawodnika
+      wzrost - wzrost zawodnika w cm (lub 0 jeśli brak)
+      pozycja - pozycja zawodnika na boisku
+      plec - płeć zawodnika (M - mężczyzna, K - kobieta)
+
+  d) opis - funkcja zwraca listę zawodników w danej lidze i w danym sezonie (oraz z początkiem nazwiska określonym w acronym)
+
+13. getTeamPlayers
+  a) wywołanie:
+    function=getTeamPlayers
+  b) parametry:
+    teamid - ID drużyny
+    seasonid - ID sezonu
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca tablicę zawodników:
+      id - ID zawodnika
+      imie - imię zawodnika
+      nazwisko - nazwisko zawodnika
+      numer - numer zawodnika
+      acornym - Pierwsza litera nazwiska zawodników
+      foto - adres URL do zdjęcia zawodnika (jeśli istnieje)
+      data_urodzenia - data urodzenia zawodnika
+      wzrost - wzrost zawodnika w cm (lub 0 jeśli brak)
+      pozycja - pozycja zawodnika na boisku
+      plec - płeć zawodnika (M - mężczyzna, K - kobieta)
+
+  d) opis - funkcja zwraca listę zawodników w danej drużynie i w danym sezonie
+
+14. getLeaguePlayersByAcronym
+  a) wywołanie:
+    function=getLeaguePlayersByAcronym
+  b) parametry:
+    leagueid - ID ligi
+    seasonid - ID sezonu
+    [acronym] - pierwsze litery nazwiska zawodnika
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca tablicę akronimów:
+      acornym - Pierwsza litera nazwiska zawodników
+      items - lista zawodników:
+        id - ID zawodnika
+        imie - imię zawodnika
+        nazwisko - nazwisko zawodnika
+        foto - adres URL do zdjęcia zawodnika (jeśli istnieje)
+        data_urodzenia - data urodzenia zawodnika
+        wzrost - wzrost zawodnika w cm (lub 0 jeśli brak)
+        pozycja - pozycja zawodnika na boisku
+        plec - płeć zawodnika (M - mężczyzna, K - kobieta)
+
+  d) opis - funkcja zwraca listę zawodników w danej lidze i w danym sezonie (oraz z początkiem nazwiska określonym w acronym) pogrupowanych wg. akronimu
+
+15. getClub
+  a) wywołanie:
+    function=getClub
+  b) parametry:
+    teamid - numer ID klubu,
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca:
+      id - Identyfikator klubu
+      nazwa - Nazwa klubu
+    Pozostałe parametry są nieobsługiwane bądź redundantne. 
+  d) opis - funkcja zwraca szczegółowe dane dotyczące drużyny
+
+16. getTeamStatistics
+  a) wywołanie:
+    function=getTeamStatistics
+  b) parametry:
+    what - jakie statystyki pokazać (0 - średnie, 1 - sumy, 2 - rekordy)
+    teamid - ID drużyny
+    [seasonid] - ID sezonu
+    [leagueid] - ID ligi
+    [roundid] - ID poziomu rozgrywek
+    [lineid] - ID kolejki
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca tablicę statystyk:
+      ile_meczow - ile meczów dotyczą statystyki
+      c2 - trafione rzuty za 2
+      w2 - wszystkie rzuty za 2
+      c3 - trafione rzuty za 3
+      w3 - wszystkie rzuty za 3
+      c1 - trafione rzuty za 1 (osobiste)
+      w1 - wszystkie rzuty za 1
+      A - atak
+      O - obrona
+      Sum - zbiórki (normalnie: A+O)
+      As - asysty
+      S - straty
+      P - przechwyty
+      B - bloki
+      F - faule
+      Pkt - punkty
+      Eval - eval (na razie 0)
+
+  d) opis - funkcja zwraca poszczególne statystyki średnie, sumy lub rekordy dla danej drużyny
+
+17. getPlayerStatistics
+  a) wywołanie:
+    function=getPlayerStatistics
+  b) parametry:
+    what - jakie statystyki pokazać (0 - średnie, 1 - sumy)
+    playerid - ID zawodnika
+    [seasonid] - ID sezonu
+    [leagueid] - ID ligi
+    [roundid] - ID poziomu rozgrywek
+    [lineid] - ID kolejki
+    [teamid] - ID drużyny
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca tablicę statystyk pogrupowaną wg sezonu, ligi i klubu:
+      tablica zawierająca informacje
+        seasonid - ID sezonu
+        leagueid - ID ligi
+        teamid - ID drużyny
+        ile_meczow - ile meczów dotyczą statystyki
+        min - czas gry w sekundach
+        c2 - trafione rzuty za 2
+        w2 - wszystkie rzuty za 2
+        c3 - trafione rzuty za 3
+        w3 - wszystkie rzuty za 3
+        c1 - trafione rzuty za 1 (osobiste)
+        w1 - wszystkie rzuty za 1
+        A - atak
+        O - obrona
+        Sum - zbiórki (normalnie: A+O)
+        As - asysty
+        S - straty
+        P - przechwyty
+        B - bloki
+        F - faule
+        Pkt - punkty
+        Eval - eval (na razie 0)
+
+  d) opis - funkcja zwraca poszczególne statystyki średnie lub sumy dla danego zawodnika
+
+18. getPlayerRecords
+  a) wywołanie:
+    function=getPlayerRecords
+  b) parametry:
+    playerid - ID zawodnika
+    [seasonid] - ID sezonu
+    [leagueid] - ID ligi
+    [roundid] - ID poziomu rozgrywek
+    [lineid] - ID kolejki
+    [teamid] - ID drużyny
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca tablice rekordów, których klucze to:
+      min - czas gry w sekundach
+      c2 - trafione rzuty za 2
+      w2 - wszystkie rzuty za 2
+      c3 - trafione rzuty za 3
+      w3 - wszystkie rzuty za 3
+      c1 - trafione rzuty za 1 (osobiste)
+      w1 - wszystkie rzuty za 1
+      A - atak
+      O - obrona
+      Sum - zbiórki (normalnie: A+O)
+      As - asysty
+      S - straty
+      P - przechwyty
+      B - bloki
+      F - faule
+      Pkt - punkty
+      Eval - eval (na razie 0)
+    Każdy element posiada następujące informacje:
+      max - rekord,
+      ile - ile razy padł,
+      z_kim - tabela zawierająca struktury, z kim padł dany rekord:
+        id - id drużyny
+        nazwa - nazwa drużyny
+        skrocona - nazwa skrócona druzyny
+        meczid - ID meczu, w którym padł rekord 
+
+  d) opis - funkcja zwraca rekordy statystyczne dla danego zawodnika
+
+19. getPlayerMBM
+  a) wywołanie:
+    function=getPlayerMBM
+  b) parametry:
+    playerid - ID zawodnika
+    [seasonid] - ID sezonu
+    [leagueid] - ID ligi
+    [roundid] - ID poziomu rozgrywek
+    [lineid] - ID kolejki
+    [teamid] - ID drużyny
+  c) wartości zwracane - tablica (objekt JSON) zawierająca tablice statystyk:
+      seasonid - ID sezonu
+      leagueid - ID ligi
+      teamid - ID drużyny
+      meczid - ID meczu
+      min - czas gry w sekundach
+      c2 - trafione rzuty za 2
+      w2 - wszystkie rzuty za 2
+      c3 - trafione rzuty za 3
+      w3 - wszystkie rzuty za 3
+      c1 - trafione rzuty za 1 (osobiste)
+      w1 - wszystkie rzuty za 1
+      A - atak
+      O - obrona
+      Sum - zbiórki (normalnie: A+O)
+      As - asysty
+      S - straty
+      P - przechwyty
+      B - bloki
+      F - faule
+      Pkt - punkty
+      Eval - eval (na razie 0)
+      klub - struktura drużyny (id, nazwa i nazwa skrócona), w której grał zawodnik
+      przeciwko - struktura drużyny (id, nazwa i nazwa skrócona), przeciwko której grał zawodnik
+
+  d) opis - funkcja zwraca statystyki zawodnika mecz po meczu
+
+20. getLeagueTable
+  a) wywołanie:
+    function=getLeagueTable
+  b) parametry:
+    seasonid - ID sezonu
+    leagueid - ID ligi
+    [groupid] - ID grupy
+  c) wartości zwracane - tablica (objekt JSON) zawierająca tablice statystyk:
+      nazwa - Nazwa drużyny
+      skrocona - nazwa skrócona drużyny
+      teamid - ID drużyny
+      mecze - ilość orzegranych meczy
+      zw - ilość zwycięstw
+      por - ilość porażek
+      pkt - ilość punktów
+      zdob - ilość pkt zdobytych
+      strac - ilość pkt straconych
+      stoszdstr - stosunek zdobytych do straconych
+      srzdob - średnio zdobytych
+      srstrac - średnio straconych
+      maxzdob - max zdobytych
+      maxstrac - maz straconych
+
+  d) opis - funkcja zwracająca tebelę wyników dla rundy zasadniczej rozgrywek
+
+21. getPlayer
+  a) wywołanie:
+    function=getPlayer
+  b) parametry:
+    playerid - ID gracza
+  c) wartości zwracane - tablica asocjacyjna (objekt JSON) zawierająca dane gracza:
+      id - ID zawodnika
+      imie - imię zawodnika
+      nazwisko - nazwisko zawodnika
+      acornym - Pierwsza litera nazwiska zawodników
+      foto - adres URL do zdjęcia zawodnika (jeśli istnieje)
+      data_urodzenia - data urodzenia zawodnika
+      wzrost - wzrost zawodnika w cm (lub 0 jeśli brak)
+      pozycja - pozycja zawodnika na boisku
+      plec - płeć zawodnika (M - mężczyzna, K - kobieta)
+      obywatelstwo - struktura z informacją o obywatelstwie
+
+  d) opis - funkcja zwraca dane gracza na podstawie ID
+
+22. getGroups
+  a) wywołanie:
+    function=getGroups
+  b) parametry:
+    leagueid - ID ligi,
+    seasonid - ID sezonu
+    roundid - ID poziomu rozgruwek
+  c) wartości zwracane - objekt JSON zawierający tablicę 'grupy':
+    id - Identyfikator aktualnego sezonu
+    nazwa - Nazwa aktualnego sezonu (np 2011/2012)
+  d) opis - funkcja zwraca informacje o grupach w danym sezonie dla danj ligi i poziomu rozgrywek. Jeśli nie ma grup, zwracana jest pusta tablica
+
+23. getInstances
+  a) wywołanie:
+    function=getInstances
+  b) parametry: brak
+  c) wartości zwracane - objekt JSON zawierający tablicę instancji
+  d) opis - funkcja zwraca informacje o instancjach w systemie ESOR. Jeśli klucz ma przypisane instancje, system zwróci informacje tylko o danych instancjach. W przeciwnym wypadku system zwraca informację o wszystkich instancjach.
+
+24. getDistricts
+  a) wywołanie:
+    function=getDistricts
+  b) parametry: brak
+  c) wartości zwracane - objekt JSON zawierający tablicę województw
+  d) opis - funkcja zwraca informacje o województwach z systemu ESOR.
+
+25. getClubs
+  a) wywołanie:
+    function=getClubs
+  b) parametry:
+    [instancesid] - ID instancji (jedna lub wiele), jeśli klucz API ma przypisane instancje, będą wybrane tylko te, które zawierają się w kluczu
+    [districtsid] - ID województwa (jedno lub wiele)
+    [seasonid] - ID sezonu (jeśli brak - aktualny sezon)
+    [leagueid] - ID ligi (jedna lub wiele)
+    [logow] - szerokość logo drużyny w pikselach (domyślnie 50px)
+    [logoh] - wysokość logo drużyny w pikselach (domyślnie 50px)
+  c) wartości zwracane - objekt JSON zawierający tablicę klubów oraz drużyn w klubach dla danego sezonu, [ligi, [województwa, [instancji]]]
+  d) opis - funkcja zwraca informacje o klubach z systemu ESOR.
+
