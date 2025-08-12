@@ -16,7 +16,9 @@ export default defineConfig({
       structure: deskStructure,
     }),
     visionTool(),
-    linkField(),
+    linkField({
+      linkableSchemaTypes: ['page', 'team', 'coach'],
+    }),
   ],
 
   schema: {

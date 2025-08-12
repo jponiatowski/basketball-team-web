@@ -10,16 +10,20 @@ export default async function PlayerPage({
   const { id } = await params;
   const player = await esorClient.getPlayer(id);
   const statistics = await esorClient.getPlayerStatistics(id);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-start gap-4">
         {player.photo && (
-          <Image
-            src={player.photo}
-            alt={`${player.firstName} ${player.lastName}`}
-            width={150}
-            height={150}
-          />
+          <figure className="relative aspect-[3/4] w-52 rounded-lg">
+            <Image
+              src={player.photo}
+              alt={`${player.firstName} ${player.lastName}`}
+              fill
+              className="rounded-lg object-cover object-top"
+              sizes="160px"
+            />
+          </figure>
         )}
         <Heading as="h1" size="4">
           {player.firstName} {player.lastName}

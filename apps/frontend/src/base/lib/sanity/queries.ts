@@ -111,3 +111,53 @@ export const footerQuery = groq`*[_type == "footer"][0] {
     }
   }
 }`;
+
+export const teamQuery = groq`*[_type == "team" && slug.current == $slug][0] {
+  _id,
+  name,
+  slug,
+  image {
+    asset-> {
+      url,
+      ...metadata {
+        lqip
+      }
+    }
+  },
+  coach[]-> {
+    _id,
+    name,
+    slug,
+    image {
+      asset-> {
+        url,
+        ...metadata {
+          lqip
+        }
+      }
+    }
+  },
+  practice[] {
+    day,
+    details[] {
+      time,
+      place
+    }
+  },
+  esorData {
+    leagueId,
+    teamId
+  },
+}`;
+
+export const teamSeoQuery = groq`*[_type == "team" && slug.current == $slug][0] {
+  seo {
+    title,
+    description,
+    image {
+      asset-> {
+        url
+      }
+    }
+  }
+}`;

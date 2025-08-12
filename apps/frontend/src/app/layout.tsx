@@ -33,7 +33,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${bebasNeue.variable} antialiased`}>
         <Theme>
           <Header />
-          <main className="mx-auto max-w-screen-xl py-10">{children}</main>
+          <main className="mx-auto max-w-screen-xl px-6 py-10">{children}</main>
           <Footer />
         </Theme>
       </body>

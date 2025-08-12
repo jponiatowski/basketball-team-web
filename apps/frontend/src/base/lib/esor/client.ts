@@ -115,7 +115,7 @@ class EsorClient {
       seasonid: params?.seasonId,
     });
 
-    return esorData.map((player) => ({
+    const mappedPlayers = esorData.map((player) => ({
       id: player.id?.toString(),
       firstName: player.imie,
       lastName: player.nazwisko,
@@ -123,6 +123,14 @@ class EsorClient {
       height: player.wzrost,
       position: player.pozycja,
     }));
+
+    // Filter out duplicates by player id
+    const uniquePlayers = mappedPlayers.filter(
+      (player, index, self) =>
+        index === self.findIndex((p) => p.id === player.id)
+    );
+
+    return uniquePlayers;
   }
 
   async getLeague(leagueId: string): Promise<League> {

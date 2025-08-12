@@ -17,7 +17,6 @@ import {
   HeaderData,
   NavigationData,
   NavigationItem,
-  Sponsor,
   SponsorsData,
   SponsorType,
 } from './types';

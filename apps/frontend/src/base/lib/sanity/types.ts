@@ -245,12 +245,25 @@ export type Link = {
   _type: 'link';
   text?: string;
   type: string;
-  internalLink?: {
-    _ref: string;
-    _type: 'reference';
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: 'page';
-  };
+  internalLink?:
+    | {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'page';
+      }
+    | {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'team';
+      }
+    | {
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: 'coach';
+      };
   url?: string;
   email?: string;
   phone?: string;
@@ -258,6 +271,111 @@ export type Link = {
   blank?: boolean;
   parameters?: string;
   anchor?: string;
+};
+
+export type Coach = {
+  _id: string;
+  _type: 'coach';
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  slug: Slug;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: 'reference';
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: 'image';
+  };
+  contactDetails?: {
+    email?: string;
+    phone?: string;
+  };
+  description?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: 'span';
+      _key: string;
+    }>;
+    style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote';
+    listItem?: 'bullet' | 'number';
+    markDefs?: Array<{
+      href?: string;
+      _type: 'link';
+      _key: string;
+    }>;
+    level?: number;
+    _type: 'block';
+    _key: string;
+  }>;
+};
+
+export type Team = {
+  _id: string;
+  _type: 'team';
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  slug: Slug;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: 'reference';
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: 'image';
+  };
+  coach?: Array<{
+    _ref: string;
+    _type: 'reference';
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: 'coach';
+  }>;
+  practice?: Array<{
+    day?: string;
+    details?: Array<{
+      time?: string;
+      place?: string;
+      _key: string;
+    }>;
+    _key: string;
+  }>;
+  esorData?: {
+    leagueId?: string;
+    teamId?: string;
+  };
+  seo?: Seo;
+};
+
+export type Seo = {
+  _type: 'seo';
+  title?: string;
+  description?: string;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: 'reference';
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: 'image';
+  };
 };
 
 export type Page = {
@@ -414,6 +532,9 @@ export type AllSanitySchemaTypes =
   | SocialMedia
   | Navigation
   | Link
+  | Coach
+  | Team
+  | Seo
   | Page
   | SanityImagePaletteSwatch
   | SanityImagePalette
@@ -595,6 +716,64 @@ export type FooterQueryResult = {
     }> | null;
   } | null;
 } | null;
+// Variable: teamQuery
+// Query: *[_type == "team" && slug.current == $slug][0] {  _id,  name,  slug,  image {    asset-> {      url,      ...metadata {        lqip      }    }  },  coach[]-> {    _id,    name,    slug,    image {      asset-> {        url,        ...metadata {          lqip        }      }    }  },  practice[] {    day,    details[] {      time,      place    }  },  esorData {    leagueId,    teamId  },}
+export type TeamQueryResult = {
+  _id: string;
+  name: string;
+  slug: Slug;
+  image: {
+    asset:
+      | {
+          url: string | null;
+          lqip: string | null;
+        }
+      | {
+          url: string | null;
+        }
+      | null;
+  } | null;
+  coach: Array<{
+    _id: string;
+    name: string;
+    slug: Slug;
+    image: {
+      asset:
+        | {
+            url: string | null;
+            lqip: string | null;
+          }
+        | {
+            url: string | null;
+          }
+        | null;
+    } | null;
+  }> | null;
+  practice: Array<{
+    day: string | null;
+    details: Array<{
+      time: string | null;
+      place: string | null;
+    }> | null;
+  }> | null;
+  esorData: {
+    leagueId: string | null;
+    teamId: string | null;
+  } | null;
+} | null;
+// Variable: teamSeoQuery
+// Query: *[_type == "team" && slug.current == $slug][0] {  seo {    title,    description,    image {      asset-> {        url      }    }  }}
+export type TeamSeoQueryResult = {
+  seo: {
+    title: string | null;
+    description: string | null;
+    image: {
+      asset: {
+        url: string | null;
+      } | null;
+    } | null;
+  } | null;
+} | null;
 
 // Query TypeMap
 import '@sanity/client';
@@ -604,5 +783,7 @@ declare module '@sanity/client' {
     '*[_type == "navigation"][0] {\n  title,\n  logo {\n    asset-> {\n      url,\n      ...metadata {\n        lqip\n      }\n    }\n  }\n}': HeaderQueryResult;
     '*[_type == "sponsor"] {\n  type,\n  name,\n  \n link {\n    _type,\n    text,\n    type,\n    internalLink-> {\n      slug\n    },\n    url,\n    email,\n    phone,\n    value,\n    blank,\n    parameters,\n    anchor\n}\n,\n  image {\n    asset-> {\n      url,\n      ...metadata {\n        lqip\n      }\n    }\n  },\n}': SponsorsQueryResult;
     '*[_type == "footer"][0] {\n  footerCopyright,\n  socialMediaLinks-> {\n    title,\n    "items": socialMediaLinks[] {\n      media,\n      \n link {\n    _type,\n    text,\n    type,\n    internalLink-> {\n      slug\n    },\n    url,\n    email,\n    phone,\n    value,\n    blank,\n    parameters,\n    anchor\n}\n\n    }\n  }\n}': FooterQueryResult;
+    '*[_type == "team" && slug.current == $slug][0] {\n  _id,\n  name,\n  slug,\n  image {\n    asset-> {\n      url,\n      ...metadata {\n        lqip\n      }\n    }\n  },\n  coach[]-> {\n    _id,\n    name,\n    slug,\n    image {\n      asset-> {\n        url,\n        ...metadata {\n          lqip\n        }\n      }\n    }\n  },\n  practice[] {\n    day,\n    details[] {\n      time,\n      place\n    }\n  },\n  esorData {\n    leagueId,\n    teamId\n  },\n}': TeamQueryResult;
+    '*[_type == "team" && slug.current == $slug][0] {\n  seo {\n    title,\n    description,\n    image {\n      asset-> {\n        url\n      }\n    }\n  }\n}': TeamSeoQueryResult;
   }
 }
