@@ -1,4 +1,4 @@
-import { Button, Card, Heading, Link, Separator } from '@radix-ui/themes';
+import { Button, Card, Link } from '@radix-ui/themes';
 import { getTeamTimetable, getTeamTimetableSeoData } from './actions';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
@@ -7,6 +7,7 @@ import { ArrowRightIcon, Image as ImageIcon } from 'lucide-react';
 import Image from 'next/image';
 import { Breadcrumbs } from '@/base/components/breadcrumbs';
 import { CLUB_NAME } from '@/base/constants';
+import { TeamPageHeading } from '@/base/components/team-page-heading';
 
 export const generateMetadata = async ({
   params,
@@ -38,11 +39,7 @@ export default async function TimetablePage({
           { label: 'Terminarz', current: true },
         ]}
       />
-      <Heading as="h1" size="8" className="flex items-center gap-3">
-        <span>{team.data.name}</span>
-        <Separator orientation="vertical" size="2" />
-        <span>Terminarz</span>
-      </Heading>
+      <TeamPageHeading teamName={team.data.name} title="Terminarz" />
       <div className="flex flex-col gap-2">
         {timetable.map((item) => {
           return (

@@ -293,9 +293,9 @@ export type Coach = {
     crop?: SanityImageCrop;
     _type: 'image';
   };
-  contactDetails?: {
-    email?: string;
-    phone?: string;
+  contactDetails: {
+    email: string;
+    phone: string;
   };
   description?: Array<{
     children?: Array<{
@@ -345,14 +345,32 @@ export type Team = {
     [internalGroqTypeReferenceTo]?: 'coach';
   }>;
   practice?: Array<{
-    day?: string;
+    day?:
+      | 'monday'
+      | 'tuesday'
+      | 'wednesday'
+      | 'thursday'
+      | 'friday'
+      | 'saturday'
+      | 'sunday';
     details?: Array<{
       time?: string;
       place?: string;
+      coach?: Array<{
+        _ref: string;
+        _type: 'reference';
+        _weak?: boolean;
+        _key: string;
+        [internalGroqTypeReferenceTo]?: 'coach';
+      }>;
       _key: string;
     }>;
     _key: string;
   }>;
+  ageGroup: {
+    from: number;
+    to: number;
+  };
   esorData?: {
     leagueId?: string;
     roundId?: string;
@@ -752,7 +770,15 @@ export type TeamQueryResult = {
     } | null;
   }> | null;
   practice: Array<{
-    day: string | null;
+    day:
+      | 'friday'
+      | 'monday'
+      | 'saturday'
+      | 'sunday'
+      | 'thursday'
+      | 'tuesday'
+      | 'wednesday'
+      | null;
     details: Array<{
       time: string | null;
       place: string | null;
@@ -813,6 +839,56 @@ export type TimetablePageQueryResult = {
 export type TimetablePageSeoQueryResult = {
   name: string;
 } | null;
+// Variable: practicePageQuery
+// Query: *[_type == "team" && slug.current == $slug][0] {  name,  slug,  practice[] {    day,    details[] {      time,      place,      coach[]-> {        _id,        name,        slug,        contactDetails,        image {          asset-> {            url,            ...metadata {              lqip            }          }        }      }    }  }}
+export type PracticePageQueryResult = {
+  name: string;
+  slug: Slug;
+  practice: Array<{
+    day:
+      | 'friday'
+      | 'monday'
+      | 'saturday'
+      | 'sunday'
+      | 'thursday'
+      | 'tuesday'
+      | 'wednesday'
+      | null;
+    details: Array<{
+      time: string | null;
+      place: string | null;
+      coach: Array<{
+        _id: string;
+        name: string;
+        slug: Slug;
+        contactDetails: {
+          email: string;
+          phone: string;
+        };
+        image: {
+          asset:
+            | {
+                url: string | null;
+                lqip: string | null;
+              }
+            | {
+                url: string | null;
+              }
+            | null;
+        } | null;
+      }> | null;
+    }> | null;
+  }> | null;
+} | null;
+// Variable: practicePageSeoQuery
+// Query: *[_type == "team" && slug.current == $slug][0] {  name,  ageGroup}
+export type PracticePageSeoQueryResult = {
+  name: string;
+  ageGroup: {
+    from: number;
+    to: number;
+  };
+} | null;
 
 // Query TypeMap
 import '@sanity/client';
@@ -829,5 +905,7 @@ declare module '@sanity/client' {
       | TimetablePageQueryResult;
     '*[_type == "team" && slug.current == $slug][0] {\n  name,\n  esorData {\n    leagueId,\n  }\n}': TablePageSeoQueryResult;
     '*[_type == "team" && slug.current == $slug][0] {\n  name,\n}': TimetablePageSeoQueryResult;
+    '*[_type == "team" && slug.current == $slug][0] {\n  name,\n  slug,\n  practice[] {\n    day,\n    details[] {\n      time,\n      place,\n      coach[]-> {\n        _id,\n        name,\n        slug,\n        contactDetails,\n        image {\n          asset-> {\n            url,\n            ...metadata {\n              lqip\n            }\n          }\n        }\n      }\n    }\n  }\n}': PracticePageQueryResult;
+    '*[_type == "team" && slug.current == $slug][0] {\n  name,\n  ageGroup\n}': PracticePageSeoQueryResult;
   }
 }

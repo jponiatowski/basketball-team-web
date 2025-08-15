@@ -16,8 +16,10 @@ export default defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
+      readOnly: true,
       options: {
         source: 'name',
+        slugify: (input) => `/trenerzy/${input.toLowerCase().replace(/\s+/g, '-')}`,
       },
       validation: (Rule) => Rule.required(),
     }),
@@ -30,9 +32,10 @@ export default defineType({
       name: 'contactDetails',
       title: 'Kontakt',
       type: 'object',
+      validation: (Rule) => Rule.required(),
       fields: [
-        {name: 'email', title: 'E-mail', type: 'email'},
-        {name: 'phone', title: 'Telefon', type: 'string'},
+        {name: 'email', title: 'E-mail', type: 'email', validation: (Rule) => Rule.required()},
+        {name: 'phone', title: 'Telefon', type: 'string', validation: (Rule) => Rule.required()},
       ],
     }),
     defineField({

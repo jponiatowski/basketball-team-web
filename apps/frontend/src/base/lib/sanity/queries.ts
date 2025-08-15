@@ -193,3 +193,34 @@ export const timetablePageQuery = groq`*[_type == "team" && slug.current == $slu
 export const timetablePageSeoQuery = groq`*[_type == "team" && slug.current == $slug][0] {
   name,
 }`;
+
+export const practicePageQuery = groq`*[_type == "team" && slug.current == $slug][0] {
+  name,
+  slug,
+  practice[] {
+    day,
+    details[] {
+      time,
+      place,
+      coach[]-> {
+        _id,
+        name,
+        slug,
+        contactDetails,
+        image {
+          asset-> {
+            url,
+            ...metadata {
+              lqip
+            }
+          }
+        }
+      }
+    }
+  }
+}`;
+
+export const practicePageSeoQuery = groq`*[_type == "team" && slug.current == $slug][0] {
+  name,
+  ageGroup
+}`;

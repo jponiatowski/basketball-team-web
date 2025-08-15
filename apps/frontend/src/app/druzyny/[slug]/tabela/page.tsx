@@ -4,6 +4,7 @@ import { cn } from '@/base/utils';
 import { Metadata } from 'next';
 import { CLUB_NAME } from '@/base/constants';
 import { Breadcrumbs } from '@/base/components/breadcrumbs';
+import { TeamPageHeading } from '@/base/components/team-page-heading';
 
 type TablePageProps = {
   params: Promise<{ slug: string }>;
@@ -34,11 +35,7 @@ export default async function TabelaPage({ params }: TablePageProps) {
           { label: 'Tabela', current: true },
         ]}
       />
-      <Heading as="h1" size="8" className="flex items-center gap-3">
-        <span>{data.team.name}</span>
-        <Separator orientation="vertical" size="2" />
-        <span>Tabela</span>
-      </Heading>
+      <TeamPageHeading teamName={data.team.name} title="Tabela" />
       <Table.Root>
         <Table.Header>
           <Table.Row>

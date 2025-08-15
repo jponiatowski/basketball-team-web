@@ -101,3 +101,22 @@ export interface TimetableItem {
   statsUrl: string;
   finished: boolean;
 }
+
+export interface Coach {
+  id: string;
+  name: string;
+  slug: string;
+  contactDetails: {
+    email: string;
+    phone: string;
+  };
+  image: Image;
+}
+export interface Practice {
+  day: string;
+  details: {
+    time: string;
+    place: string;
+    coach: Coach[];
+  };
+}

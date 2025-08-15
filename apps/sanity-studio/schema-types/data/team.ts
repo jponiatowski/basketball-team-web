@@ -41,7 +41,22 @@ export default defineType({
         {
           type: 'object',
           fields: [
-            {name: 'day', title: 'Dzień', type: 'string'},
+            {
+              name: 'day',
+              title: 'Dzień',
+              type: 'string',
+              options: {
+                list: [
+                  {title: 'Poniedziałek', value: 'monday'},
+                  {title: 'Wtorek', value: 'tuesday'},
+                  {title: 'Środa', value: 'wednesday'},
+                  {title: 'Czwartek', value: 'thursday'},
+                  {title: 'Piątek', value: 'friday'},
+                  {title: 'Sobota', value: 'saturday'},
+                  {title: 'Niedziela', value: 'sunday'},
+                ],
+              },
+            },
             {
               name: 'details',
               title: 'Szczegóły',
@@ -52,12 +67,28 @@ export default defineType({
                   fields: [
                     {name: 'time', title: 'Godzina', type: 'string'},
                     {name: 'place', title: 'Miejsce', type: 'string'},
+                    {
+                      name: 'coach',
+                      title: 'Trenerzy',
+                      type: 'array',
+                      of: [{type: 'reference', to: [{type: 'coach'}]}],
+                    },
                   ],
                 },
               ],
             },
           ],
         },
+      ],
+    }),
+    defineField({
+      name: 'ageGroup',
+      title: 'Grupa wiekowa',
+      type: 'object',
+      validation: (Rule) => Rule.required(),
+      fields: [
+        {name: 'from', title: 'Od', type: 'number', validation: (Rule) => Rule.required()},
+        {name: 'to', title: 'Do', type: 'number', validation: (Rule) => Rule.required()},
       ],
     }),
     defineField({

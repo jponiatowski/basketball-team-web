@@ -1723,18 +1723,18 @@
               "value": {
                 "type": "string"
               },
-              "optional": true
+              "optional": false
             },
             "phone": {
               "type": "objectAttribute",
               "value": {
                 "type": "string"
               },
-              "optional": true
+              "optional": false
             }
           }
         },
-        "optional": true
+        "optional": false
       },
       "description": {
         "type": "objectAttribute",
@@ -2090,7 +2090,37 @@
               "day": {
                 "type": "objectAttribute",
                 "value": {
-                  "type": "string"
+                  "type": "union",
+                  "of": [
+                    {
+                      "type": "string",
+                      "value": "monday"
+                    },
+                    {
+                      "type": "string",
+                      "value": "tuesday"
+                    },
+                    {
+                      "type": "string",
+                      "value": "wednesday"
+                    },
+                    {
+                      "type": "string",
+                      "value": "thursday"
+                    },
+                    {
+                      "type": "string",
+                      "value": "friday"
+                    },
+                    {
+                      "type": "string",
+                      "value": "saturday"
+                    },
+                    {
+                      "type": "string",
+                      "value": "sunday"
+                    }
+                  ]
                 },
                 "optional": true
               },
@@ -2112,6 +2142,50 @@
                         "type": "objectAttribute",
                         "value": {
                           "type": "string"
+                        },
+                        "optional": true
+                      },
+                      "coach": {
+                        "type": "objectAttribute",
+                        "value": {
+                          "type": "array",
+                          "of": {
+                            "type": "object",
+                            "attributes": {
+                              "_ref": {
+                                "type": "objectAttribute",
+                                "value": {
+                                  "type": "string"
+                                }
+                              },
+                              "_type": {
+                                "type": "objectAttribute",
+                                "value": {
+                                  "type": "string",
+                                  "value": "reference"
+                                }
+                              },
+                              "_weak": {
+                                "type": "objectAttribute",
+                                "value": {
+                                  "type": "boolean"
+                                },
+                                "optional": true
+                              }
+                            },
+                            "dereferencesTo": "coach",
+                            "rest": {
+                              "type": "object",
+                              "attributes": {
+                                "_key": {
+                                  "type": "objectAttribute",
+                                  "value": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
                         },
                         "optional": true
                       }
@@ -2146,6 +2220,29 @@
           }
         },
         "optional": true
+      },
+      "ageGroup": {
+        "type": "objectAttribute",
+        "value": {
+          "type": "object",
+          "attributes": {
+            "from": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "number"
+              },
+              "optional": false
+            },
+            "to": {
+              "type": "objectAttribute",
+              "value": {
+                "type": "number"
+              },
+              "optional": false
+            }
+          }
+        },
+        "optional": false
       },
       "esorData": {
         "type": "objectAttribute",
