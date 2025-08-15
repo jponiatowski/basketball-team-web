@@ -22,9 +22,11 @@ import {
   EsorTeams,
   FunctionName,
   EsorTimetable,
+  IEsorClient,
+  IEsorTransport,
 } from './types';
 
-class EsorTransport {
+class EsorTransport implements IEsorTransport {
   private readonly apiKey: string;
   private readonly baseUrl = 'https://esor.pzkosz.pl/api/';
 
@@ -69,7 +71,7 @@ class EsorTransport {
   }
 }
 
-class EsorClient {
+class EsorClient implements IEsorClient {
   private readonly transport: EsorTransport;
 
   constructor() {

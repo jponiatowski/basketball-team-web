@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { Breadcrumbs } from '@/base/components/breadcrumbs';
 import { Metadata, ResolvingMetadata } from 'next';
 import { Props } from 'next/dist/client/script';
+import { TeamPageHeading } from '@/base/components/team-page-heading';
 
 interface TeamPageProps {
   params: Promise<{ slug: string }>;
@@ -39,9 +40,7 @@ export default async function TeamPage({ params }: TeamPageProps) {
           { label: team.name ?? 'Drużyna', current: true },
         ]}
       />
-      <Heading as="h1" size="8">
-        {team.name}
-      </Heading>
+      <TeamPageHeading teamName={team.name} title="Drużyna" />
       {team.image?.url && (
         <figure className="relative mx-auto aspect-[16/9] w-full rounded-lg lg:w-3xl">
           <Image
