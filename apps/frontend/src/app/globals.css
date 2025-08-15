@@ -1,4 +1,5 @@
 @import 'tailwindcss';
+@import '@radix-ui/themes/styles.css';
 
 :root {
   --background: #0a0a0a;
@@ -9,12 +10,24 @@
   --primary-200: #bce1c3;
   --primary-300: #8fcc9a;
   --primary-400: #6bb179;
-  --primary-500: #579e64;
+  --primary-500: #579e64; /* Your original color */
   --primary-600: #438350;
   --primary-700: #366842;
   --primary-800: #2d5438;
   --primary-900: #264530;
   --primary-950: #112517;
+
+  --secondary-50: #fefbf4;
+  --secondary-100: #fdf6e3;
+  --secondary-200: #fbeac2;
+  --secondary-300: #f7d896;
+  --secondary-400: #f2c268;
+  --secondary-500: #e1b866;
+  --secondary-600: #ca9b3d;
+  --secondary-700: #a87f34;
+  --secondary-800: #896632;
+  --secondary-900: #70542c;
+  --secondary-950: #3e2d16;
 }
 
 @theme {
@@ -34,6 +47,74 @@
   --color-primary-800: var(--primary-800);
   --color-primary-900: var(--primary-900);
   --color-primary-950: var(--primary-950);
+
+  --color-secondary-50: var(--secondary-50);
+  --color-secondary-100: var(--secondary-100);
+  --color-secondary-200: var(--secondary-200);
+  --color-secondary-300: var(--secondary-300);
+  --color-secondary-400: var(--secondary-400);
+  --color-secondary-500: var(--secondary-500);
+  --color-secondary-600: var(--secondary-600);
+  --color-secondary-700: var(--secondary-700);
+  --color-secondary-800: var(--secondary-800);
+  --color-secondary-900: var(--secondary-900);
+  --color-secondary-950: var(--secondary-950);
+}
+
+/* Radix UI Accent Color Override - MUST come after Radix styles import */
+:root,
+.light,
+.light-theme,
+.radix-themes {
+  --accent-1: #fcfefc !important;
+  --accent-2: #f6faf6 !important;
+  --accent-3: #e9f5ea !important;
+  --accent-4: #dcefde !important;
+  --accent-5: #cce6cf !important;
+  --accent-6: #b9dbbd !important;
+  --accent-7: #9ecaa4 !important;
+  --accent-8: #78b481 !important;
+  --accent-9: #579e64 !important;
+  --accent-10: #4e915a !important;
+  --accent-11: #377d46 !important;
+  --accent-12: #253928 !important;
+
+  /* Use the generated alpha variants */
+  --accent-a1: #00aa0003 !important;
+  --accent-a2: #00720009 !important;
+  --accent-a3: #008c0c16 !important;
+  --accent-a4: #008b0f23 !important;
+  --accent-a5: #00820f33 !important;
+  --accent-a6: #007c0f46 !important;
+  --accent-a7: #00741061 !important;
+  --accent-a8: #00721187 !important;
+  --accent-a9: #006c14a8 !important;
+  --accent-a10: #006112b1 !important;
+  --accent-a11: #005913c8 !important;
+  --accent-a12: #001704da !important;
+
+  /* Additional Radix accent properties */
+  --accent-contrast: #fff !important;
+  --accent-surface: #f4f9f4cc !important;
+  --accent-indicator: #579e64 !important;
+  --accent-track: #579e64 !important;
+}
+
+/* Dark theme overrides */
+.dark,
+.dark-theme {
+  --accent-1: var(--primary-950) !important;
+  --accent-2: var(--primary-900) !important;
+  --accent-3: var(--primary-800) !important;
+  --accent-4: var(--primary-700) !important;
+  --accent-5: var(--primary-600) !important;
+  --accent-6: var(--primary-500) !important;
+  --accent-7: var(--primary-400) !important;
+  --accent-8: var(--primary-300) !important;
+  --accent-9: var(--primary-500) !important;
+  --accent-10: var(--primary-200) !important;
+  --accent-11: var(--primary-100) !important;
+  --accent-12: var(--primary-50) !important;
 }
 
 body {

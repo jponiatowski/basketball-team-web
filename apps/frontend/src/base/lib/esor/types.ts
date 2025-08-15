@@ -9,7 +9,8 @@ export type FunctionName =
   | 'getLeagueTable'
   | 'getAllLeagues'
   | 'getRounds'
-  | 'getGroups';
+  | 'getGroups'
+  | 'getTimetable';
 
 export type EsorId = number | string;
 
@@ -23,6 +24,7 @@ export interface EsorTeam {
   id: EsorId;
   nazwa: string;
   skrocona: string;
+  logo?: string;
 }
 
 export type EsorTeams = Record<string, EsorTeam>;
@@ -68,6 +70,7 @@ export interface EsorLeague {
   nazwa: string;
   skrocona: string;
   skrot: string;
+  typ: number;
 }
 
 export type EsorAllLeagues = Record<string, EsorLeague>;
@@ -96,4 +99,47 @@ export interface EsorGroup {
 
 export interface EsorAllGroups {
   grupy: EsorGroup[];
+}
+
+export interface EsorLine {
+  id: EsorId;
+  nazwa: string;
+}
+
+export interface EsorTimetableItem {
+  id: EsorId;
+  nrmeczu: number;
+  data: string;
+  mdata: string;
+  koniec: 0 | 1;
+  walkower: number;
+  anulowany: number;
+  przelozony: number;
+  widzowie: number;
+  wynik1: number;
+  wynik2: number;
+  kwarta1: number;
+  kwarta2: number;
+  kwarta3: number;
+  kwarta4: number;
+  dogrywka1: number;
+  dogrywka2: number;
+  dogrywka3: number;
+  dogrywka4: number;
+  dogrywka5: number;
+  rzuty: number;
+  k1: EsorTeam;
+  k1txt: string;
+  k2: EsorTeam;
+  k2txt: string;
+  liga: EsorLeague;
+  poziom: EsorRound;
+  kolejka: EsorLine;
+}
+
+export interface EsorTimetable {
+  cnt: number;
+  page: number;
+  ilestron: number;
+  items: Record<string, EsorTimetableItem>;
 }

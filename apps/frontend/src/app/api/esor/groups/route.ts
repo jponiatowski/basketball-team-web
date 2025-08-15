@@ -17,6 +17,6 @@ export async function GET(request: Request) {
   const season = await esorClient.getCurrentSeason();
 
   const groups = await esorClient.getGroups(leagueId, season.id, roundId);
-  console.log(groups);
+
   return NextResponse.json(groups);
 }

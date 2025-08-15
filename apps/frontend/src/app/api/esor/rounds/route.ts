@@ -11,7 +11,7 @@ export async function GET(request: Request) {
 
   const season = await esorClient.getCurrentSeason();
 
-  const rounds = await esorClient.getRounds(leagueId, '27');
-  console.log(rounds);
+  const rounds = await esorClient.getRounds(leagueId, season.id);
+
   return NextResponse.json(rounds);
 }

@@ -172,10 +172,24 @@ export const tablePageQuery = groq`*[_type == "team" && slug.current == $slug][0
     roundId
   }
 }`;
-
 export const tablePageSeoQuery = groq`*[_type == "team" && slug.current == $slug][0] {
   name,
   esorData {
     leagueId,
   }
+}`;
+
+export const timetablePageQuery = groq`*[_type == "team" && slug.current == $slug][0] {
+  name,
+  slug,
+  esorData {
+    leagueId,
+    teamId,
+    groupId,
+    roundId
+  }
+}`;
+
+export const timetablePageSeoQuery = groq`*[_type == "team" && slug.current == $slug][0] {
+  name,
 }`;

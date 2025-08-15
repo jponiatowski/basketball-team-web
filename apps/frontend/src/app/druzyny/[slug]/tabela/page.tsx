@@ -1,4 +1,4 @@
-import { Heading, Table } from '@radix-ui/themes';
+import { Heading, Separator, Table } from '@radix-ui/themes';
 import { getTeamSeoData, getTeamTablePageData } from './actions';
 import { cn } from '@/base/utils';
 import { Metadata } from 'next';
@@ -34,8 +34,10 @@ export default async function TabelaPage({ params }: TablePageProps) {
           { label: 'Tabela', current: true },
         ]}
       />
-      <Heading as="h1" size="8">
-        Tabela
+      <Heading as="h1" size="8" className="flex items-center gap-3">
+        <span>{data.team.name}</span>
+        <Separator orientation="vertical" size="2" />
+        <span>Tabela</span>
       </Heading>
       <Table.Root>
         <Table.Header>

@@ -21,7 +21,7 @@ export const getTeamTablePageData = async (slug: string) => {
 
   const table = await esorClient.getLeagueTable(
     team.data?.esorData?.leagueId,
-    '27',
+    season.id,
     team.data?.esorData?.groupId
   );
 

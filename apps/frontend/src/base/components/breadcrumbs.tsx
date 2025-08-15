@@ -45,7 +45,7 @@ export const Breadcrumbs = ({
               ) : (
                 <a
                   href={item.href}
-                  className="hover:text-primary-600 ms-1 inline-flex items-center text-sm font-medium text-gray-700 md:ms-2"
+                  className="hover:text-primary-700 ms-1 inline-flex items-center text-sm font-medium text-gray-700 md:ms-2"
                 >
                   {item.label}
                 </a>

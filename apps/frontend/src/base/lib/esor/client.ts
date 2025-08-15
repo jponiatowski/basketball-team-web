@@ -7,6 +7,7 @@ import {
   Season,
   Team,
   Group,
+  TimetableItem,
 } from '@/base/types';
 import {
   EsorAllLeagues,
@@ -20,6 +21,7 @@ import {
   EsorTeam,
   EsorTeams,
   FunctionName,
+  EsorTimetable,
 } from './types';
 
 class EsorTransport {
@@ -68,7 +70,11 @@ class EsorTransport {
 }
 
 class EsorClient {
-  private readonly transport = new EsorTransport();
+  private readonly transport: EsorTransport;
+
+  constructor() {
+    this.transport = new EsorTransport();
+  }
 
   async getCurrentSeason(): Promise<Season> {
     const esorData = await this.transport.call<EsorSeason>('getCurrentSeason');
@@ -287,6 +293,74 @@ class EsorClient {
       eval: stat.Eval,
       points: stat.Pkt,
     }));
+  }
+
+  async getTimetable(
+    leagueId: string,
+    seasonId: string,
+    params?: { roundId?: string; groupId?: string; teamId?: string }
+  ): Promise<TimetableItem[]> {
+    const esorData = await this.transport.call<EsorTimetable>('getTimetable', {
+      leagueid: leagueId,
+      seasonid: seasonId,
+      round: params?.roundId,
+      groupid: params?.groupId,
+      team: params?.teamId,
+    });
+
+    return Object.values(esorData.items).map((item) => {
+      return {
+        id: item.id?.toString(),
+        homeScore: item.wynik1,
+        awayScore: item.wynik2,
+        homeTeam: {
+          id: item.k1.id?.toString(),
+          name: item.k1.nazwa,
+          shortName: item.k1.skrocona,
+          logo: item.k1.logo,
+        },
+        awayTeam: {
+          id: item.k2.id?.toString(),
+          name: item.k2.nazwa,
+          shortName: item.k2.skrocona,
+          logo: item.k2.logo,
+        },
+        date: item.mdata,
+        round: {
+          id: item.poziom.id?.toString(),
+          name: item.poziom.nazwa,
+          shortName: item.poziom.nazwaskrocona,
+        },
+        leg: item.kolejka.nazwa,
+        group: {
+          id: item.kolejka.id?.toString(),
+          name: item.kolejka.nazwa,
+        },
+        league: {
+          id: item.liga.id?.toString(),
+          name: item.liga.nazwa,
+          shortName: item.liga.skrocona,
+          acronym: item.liga.skrot,
+        },
+        scoreByQuarters: [
+          item.kwarta1?.toString(),
+          item.kwarta2?.toString(),
+          item.kwarta3?.toString(),
+          item.kwarta4?.toString(),
+          item.dogrywka1?.toString(),
+          item.dogrywka2?.toString(),
+          item.dogrywka3?.toString(),
+          item.dogrywka4?.toString(),
+          item.dogrywka5?.toString(),
+        ].filter(Boolean) as string[],
+        finalScore: `${item.wynik1}:${item.wynik2}`,
+        finished: Boolean(item.koniec),
+        statsUrl:
+          item.liga.typ < 2
+            ? `https://dzkosz.wroclaw.pl/mecz/${item.id}`
+            : `https://rozgrywki.pzkosz.pl/mecz/${item.id}`,
+      };
+    });
   }
 }
 

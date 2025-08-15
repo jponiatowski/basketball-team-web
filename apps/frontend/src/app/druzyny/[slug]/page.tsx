@@ -42,16 +42,18 @@ export default async function TeamPage({ params }: TeamPageProps) {
       <Heading as="h1" size="8">
         {team.name}
       </Heading>
-      <figure className="relative mx-auto aspect-[16/9] w-full rounded-lg lg:w-3xl">
-        <Image
-          src={team.image?.url ?? ''}
-          placeholder="blur"
-          blurDataURL={team.image?.placeholder ?? ''}
-          alt={team.name ?? ''}
-          fill
-          className="rounded-lg object-cover object-center"
-        />
-      </figure>
+      {team.image?.url && (
+        <figure className="relative mx-auto aspect-[16/9] w-full rounded-lg lg:w-3xl">
+          <Image
+            src={team.image?.url ?? ''}
+            placeholder="blur"
+            blurDataURL={team.image?.placeholder ?? ''}
+            alt={team.name ?? ''}
+            fill
+            className="rounded-lg object-cover object-center"
+          />
+        </figure>
+      )}
       <Heading as="h2" size="7">
         Trenerzy
       </Heading>

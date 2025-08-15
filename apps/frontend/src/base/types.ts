@@ -18,6 +18,7 @@ export interface Team {
   id: string;
   name: string;
   shortName: string;
+  logo?: string;
 }
 
 export interface PlayerStatistics {
@@ -82,4 +83,21 @@ export interface Round {
 export interface Group {
   id: string;
   name: string;
+}
+
+export interface TimetableItem {
+  id: string;
+  homeScore: number;
+  awayScore: number;
+  homeTeam: Team;
+  awayTeam: Team;
+  date: string;
+  round: Round;
+  leg: string;
+  league: League;
+  group: Group;
+  scoreByQuarters: string[];
+  finalScore: string;
+  statsUrl: string;
+  finished: boolean;
 }
