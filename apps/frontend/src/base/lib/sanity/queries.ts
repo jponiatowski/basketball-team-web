@@ -224,3 +224,33 @@ export const practicePageSeoQuery = groq`*[_type == "team" && slug.current == $s
   name,
   ageGroup
 }`;
+
+export const singlePostQuery = groq`*[_type == "post" && slug.current == $slug][0] {
+  _id,
+  title,
+  slug,
+  publishedAt,
+  mainImage {
+    asset-> {
+      url,
+      ...metadata {
+        lqip   
+      }
+    }
+  },
+  body[] {
+    ...,
+    _type == "imageBlock" => {
+      file {
+        asset-> {
+          url,
+          ...metadata {
+            dimensions,
+            lqip
+          }
+        },
+
+      }
+    }
+  }
+}`;

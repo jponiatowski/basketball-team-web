@@ -196,6 +196,12 @@ export interface IEsorClient {
   getTimetable(
     leagueId: string,
     seasonId: string,
-    params?: { roundId?: string; groupId?: string; teamId?: string }
+    params?: {
+      roundId?: string;
+      groupId?: string;
+      teamId?: string;
+      homeTeamId?: string;
+      awayTeamId?: string;
+    }
   ): Promise<TimetableItem[]>;
 }

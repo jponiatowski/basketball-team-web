@@ -300,7 +300,13 @@ class EsorClient implements IEsorClient {
   async getTimetable(
     leagueId: string,
     seasonId: string,
-    params?: { roundId?: string; groupId?: string; teamId?: string }
+    params?: {
+      roundId?: string;
+      groupId?: string;
+      teamId?: string;
+      homeTeamId?: string;
+      awayTeamId?: string;
+    }
   ): Promise<TimetableItem[]> {
     const esorData = await this.transport.call<EsorTimetable>('getTimetable', {
       leagueid: leagueId,
@@ -308,6 +314,8 @@ class EsorClient implements IEsorClient {
       round: params?.roundId,
       groupid: params?.groupId,
       team: params?.teamId,
+      home: params?.homeTeamId,
+      visitor: params?.awayTeamId,
     });
 
     return Object.values(esorData.items).map((item) => {

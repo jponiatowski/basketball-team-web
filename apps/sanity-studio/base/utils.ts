@@ -1,3 +1,5 @@
+import {EsorEntity} from './types'
+
 export const camelCaseToRegular = (str: string): string => {
   return (
     str
@@ -6,4 +8,16 @@ export const camelCaseToRegular = (str: string): string => {
       // Capitalize first letter of each word
       .replace(/\b\w/g, (c) => c.toUpperCase())
   )
+}
+
+export const sortEsorEntities = (entities: EsorEntity[]) => {
+  return [...entities].sort((a, b) => {
+    if (a.name < b.name) {
+      return -1
+    }
+    if (a.name > b.name) {
+      return 1
+    }
+    return 0
+  })
 }

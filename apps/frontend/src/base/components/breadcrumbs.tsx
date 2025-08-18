@@ -29,7 +29,7 @@ export const Breadcrumbs = ({
           return (
             <li
               key={`${item.label}-${idx}`}
-              className="inline-flex items-center"
+              className="inline-flex items-center text-nowrap"
               aria-current={isLast ? 'page' : undefined}
             >
               {idx > 0 && (
@@ -39,7 +39,7 @@ export const Breadcrumbs = ({
               )}
 
               {isLast || !item.href ? (
-                <span className="ms-1 inline-flex items-center text-sm font-medium text-gray-500 md:ms-2">
+                <span className="ms-1 inline-flex items-center truncate text-sm font-medium text-gray-500 md:ms-2">
                   {item.label}
                 </span>
               ) : (

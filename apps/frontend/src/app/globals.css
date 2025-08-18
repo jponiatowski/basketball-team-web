@@ -60,7 +60,9 @@
   --color-secondary-900: var(--secondary-900);
   --color-secondary-950: var(--secondary-950);
 }
-
+.radix-themes {
+  --default-font-family: var(--font-inter) !important;
+}
 /* Radix UI Accent Color Override - MUST come after Radix styles import */
 :root,
 .light,
@@ -127,6 +129,38 @@ a:hover {
   text-decoration: none;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-bold;
+}
+
+h1 {
+  @apply text-2xl sm:text-3xl md:text-3xl lg:text-4xl;
+}
+
+h2 {
+  @apply text-xl sm:text-2xl md:text-2xl lg:text-3xl;
+}
+
+h3 {
+  @apply text-lg sm:text-xl md:text-xl lg:text-2xl;
+}
+
+h4 {
+  @apply text-base sm:text-lg md:text-lg lg:text-xl;
+}
+
+h5 {
+  @apply text-sm sm:text-base md:text-base lg:text-lg;
+}
+
+h6 {
+  @apply text-sm sm:text-sm md:text-base lg:text-base;
+}
 @utility collapsible-content {
   overflow: hidden;
 

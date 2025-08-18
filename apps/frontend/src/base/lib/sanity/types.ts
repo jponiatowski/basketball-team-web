@@ -13,6 +13,38 @@
  */
 
 // Source: schema.json
+export type ImageBlock = {
+  _type: 'imageBlock';
+  file: {
+    asset?: {
+      _ref: string;
+      _type: 'reference';
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    _type: 'image';
+  };
+  alt: string;
+  caption?: string;
+};
+
+export type EsorGame = {
+  _type: 'esorGame';
+  leagueId: string;
+  roundId: string;
+  groupId?: string;
+  homeTeamId: string;
+  awayTeamId: string;
+};
+
+export type Youtube = {
+  _type: 'youtube';
+  url?: string;
+};
+
 export type BlockContent = Array<
   | {
       children?: Array<{
@@ -32,19 +64,15 @@ export type BlockContent = Array<
       _type: 'block';
       _key: string;
     }
-  | {
-      asset?: {
-        _ref: string;
-        _type: 'reference';
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      _type: 'image';
+  | ({
       _key: string;
-    }
+    } & ImageBlock)
+  | ({
+      _key: string;
+    } & Youtube)
+  | ({
+      _key: string;
+    } & EsorGame)
 >;
 
 export type Sponsor = {
@@ -84,6 +112,13 @@ export type Post = {
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: 'author';
   };
+  categories?: Array<{
+    _ref: string;
+    _type: 'reference';
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: 'category';
+  }>;
   mainImage?: {
     asset?: {
       _ref: string;
@@ -96,13 +131,6 @@ export type Post = {
     crop?: SanityImageCrop;
     _type: 'image';
   };
-  categories?: Array<{
-    _ref: string;
-    _type: 'reference';
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: 'category';
-  }>;
   publishedAt?: string;
   body?: BlockContent;
 };
@@ -114,6 +142,7 @@ export type Category = {
   _updatedAt: string;
   _rev: string;
   title?: string;
+  slug?: Slug;
   description?: string;
 };
 
@@ -125,36 +154,6 @@ export type Author = {
   _rev: string;
   name?: string;
   slug?: Slug;
-  image?: {
-    asset?: {
-      _ref: string;
-      _type: 'reference';
-      _weak?: boolean;
-      [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: 'image';
-  };
-  bio?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: 'span';
-      _key: string;
-    }>;
-    style?: 'normal';
-    listItem?: never;
-    markDefs?: Array<{
-      href?: string;
-      _type: 'link';
-      _key: string;
-    }>;
-    level?: number;
-    _type: 'block';
-    _key: string;
-  }>;
 };
 
 export type Footer = {
@@ -543,6 +542,9 @@ export type SanityAssetSourceData = {
 };
 
 export type AllSanitySchemaTypes =
+  | ImageBlock
+  | EsorGame
+  | Youtube
   | BlockContent
   | Sponsor
   | Post
@@ -889,6 +891,76 @@ export type PracticePageSeoQueryResult = {
     to: number;
   };
 } | null;
+// Variable: singlePostQuery
+// Query: *[_type == "post" && slug.current == $slug][0] {  _id,  title,  slug,  publishedAt,  mainImage {    asset-> {      url,      ...metadata {        lqip         }    }  },  body[] {    ...,    _type == "imageBlock" => {      file {        asset-> {          url,          ...metadata {            lqip          }        },      }    }  }}
+export type SinglePostQueryResult = {
+  _id: string;
+  title: string | null;
+  slug: Slug | null;
+  publishedAt: string | null;
+  mainImage: {
+    asset:
+      | {
+          url: string | null;
+          lqip: string | null;
+        }
+      | {
+          url: string | null;
+        }
+      | null;
+  } | null;
+  body: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: 'span';
+          _key: string;
+        }>;
+        style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'normal';
+        listItem?: 'bullet';
+        markDefs?: Array<{
+          href?: string;
+          _type: 'link';
+          _key: string;
+        }>;
+        level?: number;
+        _type: 'block';
+        _key: string;
+      }
+    | {
+        _key: string;
+        _type: 'esorGame';
+        leagueId: string;
+        roundId: string;
+        groupId?: string;
+        homeTeamId: string;
+        awayTeamId: string;
+      }
+    | {
+        _key: string;
+        _type: 'imageBlock';
+        file: {
+          asset:
+            | {
+                url: string | null;
+                lqip: string | null;
+              }
+            | {
+                url: string | null;
+              }
+            | null;
+        };
+        alt: string;
+        caption?: string;
+      }
+    | {
+        _key: string;
+        _type: 'youtube';
+        url?: string;
+      }
+  > | null;
+} | null;
 
 // Query TypeMap
 import '@sanity/client';
@@ -907,5 +979,6 @@ declare module '@sanity/client' {
     '*[_type == "team" && slug.current == $slug][0] {\n  name,\n}': TimetablePageSeoQueryResult;
     '*[_type == "team" && slug.current == $slug][0] {\n  name,\n  slug,\n  practice[] {\n    day,\n    details[] {\n      time,\n      place,\n      coach[]-> {\n        _id,\n        name,\n        slug,\n        contactDetails,\n        image {\n          asset-> {\n            url,\n            ...metadata {\n              lqip\n            }\n          }\n        }\n      }\n    }\n  }\n}': PracticePageQueryResult;
     '*[_type == "team" && slug.current == $slug][0] {\n  name,\n  ageGroup\n}': PracticePageSeoQueryResult;
+    '*[_type == "post" && slug.current == $slug][0] {\n  _id,\n  title,\n  slug,\n  publishedAt,\n  mainImage {\n    asset-> {\n      url,\n      ...metadata {\n        lqip   \n      }\n    }\n  },\n  body[] {\n    ...,\n    _type == "imageBlock" => {\n      file {\n        asset-> {\n          url,\n          ...metadata {\n            lqip\n          }\n        },\n      }\n    }\n  }\n}': SinglePostQueryResult;
   }
 }

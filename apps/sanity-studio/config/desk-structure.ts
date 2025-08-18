@@ -1,6 +1,6 @@
 import {DocumentsIcon, TiersIcon, DashboardIcon, DatabaseIcon} from '@sanity/icons'
 import type {StructureBuilder} from 'sanity/structure'
-import {camelCaseToRegular} from '../utils/camel-case-to-regular'
+import {camelCaseToRegular} from '../base/utils'
 import {dataSchemaTypes} from '../schema-types/data'
 import {layoutSchemaTypes} from '../schema-types/layout'
 import {sectionSchemaTypes} from '../schema-types/sections'
@@ -33,7 +33,9 @@ export const deskStructure = (S: StructureBuilder) =>
             .items(
               sectionSchemaTypes.map((type) =>
                 S.listItem()
+                  // @ts-expect-error
                   .title(camelCaseToRegular(type.name))
+                  // @ts-expect-error
                   .child(S.documentTypeList(type.name)),
               ),
             ),
