@@ -38,7 +38,19 @@ export const BlockEditor = ({ body }: BlockEditorProps) => {
                 <GameCard {...value} />
               </Suspense>
             ),
-            esorTimetable: ({ value }) => <Timetable {...value} />,
+            esorTimetable: ({ value }) => (
+              <Suspense
+                fallback={
+                  <Skeleton
+                    width="100%"
+                    height="1250px"
+                    className="!mx-auto !my-4"
+                  />
+                }
+              >
+                <Timetable {...value} />
+              </Suspense>
+            ),
             youtube: ({ value }) => <YouTubeVideo value={value} />,
             imageBlock: ({ value }) => (
               <Image

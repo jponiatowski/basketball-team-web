@@ -1,8 +1,8 @@
-import { Button, Card } from '@radix-ui/themes';
-import { esorClient } from '../../../lib/esor/client';
-import { TeamLogo } from '../../team-logo';
-import { cn } from '../../../utils';
 import Link from 'next/link';
+import { Button, Card } from '@radix-ui/themes';
+import { esorClient } from '@/base/lib/esor/client';
+import { TeamLogo } from '@/base/components/team-logo';
+import { cn } from '@/base/utils';
 import { ArrowRightIcon } from 'lucide-react';
 
 interface GameCardProps {

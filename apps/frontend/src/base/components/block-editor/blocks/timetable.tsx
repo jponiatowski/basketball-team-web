@@ -107,42 +107,39 @@ export const Timetable = async (props: TimetableProps) => {
                   align="center"
                   className="last-child:border-0 md:hidden"
                 >
-                  <div
-                    className={cn(
-                      'flex flex-col gap-2',
-                      'border-b border-b-gray-100 p-4'
-                    )}
-                  >
-                    <Flex justify="between">
-                      <div className="font-bold">Godzina:</div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-3.5" />
-                        {format(new Date(Number(item.date) * 1000), 'kk:mm', {
-                          locale: pl,
-                        })}
-                      </div>
-                    </Flex>
-                    <Flex justify="between">
-                      <div className="font-bold">Gospodarz:</div>
-                      <div className="flex items-center gap-1">
-                        {item.homeTeam.name}
-                      </div>
-                    </Flex>
-                    <Flex justify="between">
-                      <div className="font-bold">Gość:</div>
-                      <div className="flex items-center gap-1">
-                        {item.awayTeam.name}
-                      </div>
-                    </Flex>
-                    <Flex justify="between">
-                      <div className="font-bold">Wynik:</div>
-                      <div className="text-secondary-600 font-bold hover:underline">
-                        <Link href={item.statsUrl} target="_blank">
-                          {item.finalScore}
-                        </Link>
-                      </div>
-                    </Flex>
-                  </div>
+                  <Table.Cell colSpan={5}>
+                    <div className={cn('flex flex-col gap-2', 'p-2')}>
+                      <Flex justify="between">
+                        <div className="font-bold">Godzina:</div>
+                        <div className="flex items-center gap-1 text-right">
+                          <Clock className="h-3.5" />
+                          {format(new Date(Number(item.date) * 1000), 'kk:mm', {
+                            locale: pl,
+                          })}
+                        </div>
+                      </Flex>
+                      <Flex justify="between">
+                        <div className="font-bold">Gospodarz:</div>
+                        <div className="max-w-[calc(100%-100px)] flex-shrink truncate overflow-hidden text-right text-nowrap">
+                          {item.homeTeam.name}
+                        </div>
+                      </Flex>
+                      <Flex justify="between">
+                        <div className="font-bold">Gość:</div>
+                        <div className="max-w-[calc(100%-100px)] flex-shrink truncate overflow-hidden text-right text-nowrap">
+                          {item.awayTeam.name}
+                        </div>
+                      </Flex>
+                      <Flex justify="between">
+                        <div className="font-bold">Wynik:</div>
+                        <div className="text-secondary-600 text-right font-bold hover:underline">
+                          <Link href={item.statsUrl} target="_blank">
+                            {item.finalScore}
+                          </Link>
+                        </div>
+                      </Flex>
+                    </div>
+                  </Table.Cell>
                 </Table.Row>
               </Fragment>
             ))}
