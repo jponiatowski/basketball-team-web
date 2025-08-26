@@ -3,7 +3,7 @@ import { esorClient } from '../../../lib/esor/client';
 import { TeamLogo } from '../../team-logo';
 import { cn } from '../../../utils';
 import Link from 'next/link';
-import { ArrowRight, ArrowRightIcon } from 'lucide-react';
+import { ArrowRightIcon } from 'lucide-react';
 
 interface GameCardProps {
   leagueId: string;

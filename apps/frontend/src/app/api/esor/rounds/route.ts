@@ -4,14 +4,16 @@ import { NextResponse } from 'next/server';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const leagueId = searchParams.get('leagueId');
+  const seasonId = searchParams.get('seasonId');
 
-  if (!leagueId) {
-    return NextResponse.json({ error: 'Missing leagueId' }, { status: 400 });
+  if (!leagueId || !seasonId) {
+    return NextResponse.json(
+      { error: 'Missing required parameters' },
+      { status: 400 }
+    );
   }
 
-  const season = await esorClient.getCurrentSeason();
-
-  const rounds = await esorClient.getRounds(leagueId, season.id);
+  const rounds = await esorClient.getRounds(leagueId, seasonId);
 
   return NextResponse.json(rounds);
 }

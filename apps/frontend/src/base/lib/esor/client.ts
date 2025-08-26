@@ -88,6 +88,18 @@ class EsorClient implements IEsorClient {
     };
   }
 
+  async getAllSeasons(): Promise<Season[]> {
+    const esorData = await this.transport.call<EsorSeason[]>('getAllSeasons');
+
+    return Object.values(esorData)
+      .map((season) => ({
+        id: season.id?.toString(),
+        name: season.nazwa,
+        shortName: season.skrocona,
+      }))
+      .sort((a, b) => Number(b.shortName) - Number(a.shortName));
+  }
+
   async getTeam(
     teamId: string,
     params?: { seasonId?: string; leagueId?: string }

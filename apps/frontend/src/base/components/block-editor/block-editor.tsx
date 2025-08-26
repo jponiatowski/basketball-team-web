@@ -2,7 +2,7 @@ import { Skeleton, Text } from '@radix-ui/themes';
 import Link from 'next/link';
 import { PortableText } from 'next-sanity';
 import { Suspense } from 'react';
-import { GameCard, Image, YouTubeVideo } from './blocks';
+import { GameCard, Image, Timetable, YouTubeVideo } from './blocks';
 import { BlockContent } from '@/base/lib/sanity/types';
 
 interface BlockEditorProps {
@@ -38,6 +38,7 @@ export const BlockEditor = ({ body }: BlockEditorProps) => {
                 <GameCard {...value} />
               </Suspense>
             ),
+            esorTimetable: ({ value }) => <Timetable {...value} />,
             youtube: ({ value }) => <YouTubeVideo value={value} />,
             imageBlock: ({ value }) => (
               <Image

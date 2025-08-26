@@ -1,11 +1,12 @@
 import { esorClient } from '@/base/lib/esor/client';
-import { Card, Table } from '@radix-ui/themes';
+import { Card, Flex, Table } from '@radix-ui/themes';
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 import { TeamLogo } from '../../team-logo';
 import { Clock } from 'lucide-react';
 import Link from 'next/link';
 import { capitalizeFirstLetter, cn } from '@/base/utils';
+import { Fragment } from 'react';
 
 interface TimetableProps {
   seasonId: string;
@@ -57,7 +58,6 @@ const getData = async ({
 
 export const Timetable = async (props: TimetableProps) => {
   const data = await getData(props);
-  console.log(data);
   return (
     <div className="flex flex-col gap-8">
       {Object.entries(data?.groupedByDate ?? {}).map(([date, items]) => (
@@ -74,34 +74,77 @@ export const Timetable = async (props: TimetableProps) => {
           </Table.Header>
           <Table.Body>
             {items.map((item) => (
-              <Table.Row
-                key={item.id}
-                align="center"
-                className="last-child:border-0"
-              >
-                <Table.Cell>
-                  <div className="flex items-center gap-1">
-                    <Clock className="h-3.5" />
-                    {format(new Date(Number(item.date) * 1000), 'kk:mm', {
-                      locale: pl,
-                    })}
+              <Fragment key={item.id}>
+                <Table.Row
+                  align="center"
+                  className="last-child:border-0 hidden md:table-row"
+                >
+                  <Table.Cell>
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-3.5" />
+                      {format(new Date(Number(item.date) * 1000), 'kk:mm', {
+                        locale: pl,
+                      })}
+                    </div>
+                  </Table.Cell>
+                  <Table.Cell className="w-52 text-center">
+                    {item.homeTeam.name}
+                  </Table.Cell>
+
+                  <Table.Cell>vs</Table.Cell>
+
+                  <Table.Cell className="w-52 text-center">
+                    {item.awayTeam.name}
+                  </Table.Cell>
+                  <Table.Cell className="text-secondary-600 font-bold hover:underline">
+                    <Link href={item.statsUrl} target="_blank">
+                      {item.finalScore}
+                    </Link>
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row
+                  key={item.id}
+                  align="center"
+                  className="last-child:border-0 md:hidden"
+                >
+                  <div
+                    className={cn(
+                      'flex flex-col gap-2',
+                      'border-b border-b-gray-100 p-4'
+                    )}
+                  >
+                    <Flex justify="between">
+                      <div className="font-bold">Godzina:</div>
+                      <div className="flex items-center gap-1">
+                        <Clock className="h-3.5" />
+                        {format(new Date(Number(item.date) * 1000), 'kk:mm', {
+                          locale: pl,
+                        })}
+                      </div>
+                    </Flex>
+                    <Flex justify="between">
+                      <div className="font-bold">Gospodarz:</div>
+                      <div className="flex items-center gap-1">
+                        {item.homeTeam.name}
+                      </div>
+                    </Flex>
+                    <Flex justify="between">
+                      <div className="font-bold">Gość:</div>
+                      <div className="flex items-center gap-1">
+                        {item.awayTeam.name}
+                      </div>
+                    </Flex>
+                    <Flex justify="between">
+                      <div className="font-bold">Wynik:</div>
+                      <div className="text-secondary-600 font-bold hover:underline">
+                        <Link href={item.statsUrl} target="_blank">
+                          {item.finalScore}
+                        </Link>
+                      </div>
+                    </Flex>
                   </div>
-                </Table.Cell>
-                <Table.Cell className="w-52 text-center">
-                  {item.homeTeam.name}
-                </Table.Cell>
-
-                <Table.Cell>vs</Table.Cell>
-
-                <Table.Cell className="w-52 text-center">
-                  {item.awayTeam.name}
-                </Table.Cell>
-                <Table.Cell className="text-secondary-600 font-bold hover:underline">
-                  <Link href={item.statsUrl} target="_blank">
-                    {item.finalScore}
-                  </Link>
-                </Table.Cell>
-              </Table.Row>
+                </Table.Row>
+              </Fragment>
             ))}
           </Table.Body>
         </Table.Root>

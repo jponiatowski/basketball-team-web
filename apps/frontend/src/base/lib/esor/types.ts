@@ -12,6 +12,7 @@ import type {
 
 export type FunctionName =
   | 'getCurrentSeason'
+  | 'getAllSeasons'
   | 'getTeamPlayers'
   | 'getTeam'
   | 'getTeams'
@@ -165,6 +166,7 @@ export interface IEsorTransport {
 
 export interface IEsorClient {
   getCurrentSeason(): Promise<Season>;
+  getAllSeasons(): Promise<Season[]>;
   getTeam(
     teamId: string,
     params?: { seasonId?: string; leagueId?: string }
