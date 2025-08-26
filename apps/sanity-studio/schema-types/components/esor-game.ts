@@ -1,6 +1,6 @@
-import {defineType, defineField} from 'sanity'
+import {defineType} from 'sanity'
 import EsorGameSelector from '../../components/esor-game-selector'
-import EsorGamePreview from '../../components/esort-game-preview'
+import EsorGamePreview from '../../components/esor-game-preview'
 
 export const esorGame = defineType({
   name: 'esorGame',

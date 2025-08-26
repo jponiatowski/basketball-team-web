@@ -68,5 +68,8 @@ export default defineType({
     defineArrayMember({
       type: 'esorGame',
     }),
+    defineArrayMember({
+      type: 'esorTimetable',
+    }),
   ],
 })
