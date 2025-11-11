@@ -1,6 +1,63 @@
 import { esorClient } from '@/base/lib/esor/client';
-import { Heading, Table } from '@radix-ui/themes';
+import {
+  Heading,
+  Table,
+  Tabs,
+  Box,
+  Separator,
+  Text,
+  Flex,
+  Skeleton,
+} from '@radix-ui/themes';
 import Image from 'next/image';
+import { AverageTable } from './components/average';
+import { Suspense } from 'react';
+import { cn } from '@/base/utils';
+import { RecordsTable } from './components/records';
+import { TablePlaceholder } from './components/table-placeholder';
+import { Player } from '@/base/types';
+
+interface PlayerDataProps {
+  player: Player;
+  className?: string;
+}
+
+export function PlayerData({ player, className }: PlayerDataProps) {
+  return (
+    <div
+      className={cn(
+        'flex flex-col gap-2',
+        'sm:grid sm:grid-cols-3 sm:gap-8',
+        className
+      )}
+    >
+      <div className={cn('flex items-center gap-2 sm:flex-col sm:items-start')}>
+        <Text size="2" color="gray">
+          Obywatelstwo
+        </Text>
+        <Text size="3" weight="bold">
+          {player.nationality || '-'}
+        </Text>
+      </div>
+      <div className={cn('flex items-center gap-2 sm:flex-col sm:items-start')}>
+        <Text size="2" color="gray">
+          Wzrost
+        </Text>
+        <Text size="3" weight="bold">
+          {player.height || '-'}
+        </Text>
+      </div>
+      <div className={cn('flex items-center gap-2 sm:flex-col sm:items-start')}>
+        <Text size="2" color="gray">
+          Wiek
+        </Text>
+        <Text size="3" weight="bold">
+          {player.age || '-'}
+        </Text>
+      </div>
+    </div>
+  );
+}
 
 export default async function PlayerPage({
   params,
@@ -9,68 +66,72 @@ export default async function PlayerPage({
 }) {
   const { id } = await params;
   const player = await esorClient.getPlayer(id);
-  const statistics = await esorClient.getPlayerStatistics(id);
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-start gap-4">
+      <div className={cn('flex items-start gap-8', 'sm:mb-6')}>
         {player.photo && (
-          <figure className="relative aspect-[3/4] w-52 rounded-lg">
+          <figure className="relative aspect-[3/4] w-52 rounded-sm">
             <Image
               src={player.photo}
               alt={`${player.firstName} ${player.lastName}`}
               fill
-              className="rounded-lg object-cover object-top"
+              className="rounded-sm object-cover object-top"
               sizes="160px"
             />
           </figure>
         )}
-        <Heading as="h1" size="4">
-          {player.firstName} {player.lastName}
-        </Heading>
+        <div>
+          <Heading as="h1" size={{ initial: '6', sm: '8' }} mb="4">
+            {player.firstName} {player.lastName}
+          </Heading>
+          <Flex
+            gap="2"
+            align={{ initial: 'start', sm: 'center' }}
+            direction={{ initial: 'column', sm: 'row' }}
+          >
+            {player?.number ? (
+              <Text
+                size={{ initial: '2', sm: '4' }}
+                color="gray"
+              >{`#${player.number}`}</Text>
+            ) : null}
+            <Separator orientation="vertical" className="!hidden sm:!block" />
+            {player?.position ? (
+              <Text color="gray" size={{ initial: '2', sm: '4' }}>
+                {player.position}
+              </Text>
+            ) : null}
+          </Flex>
+          <Separator my="4" size="4" className="!hidden sm:!block" />
+          <PlayerData player={player} className="!hidden sm:!grid" />
+        </div>
       </div>
-      <Table.Root>
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeaderCell>Sezon</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Liga</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Drużyna</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Mecze</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Minuty</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Punkty</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>EVAL</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>2P</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>3P</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>1P</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Reb</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>As</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>St</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>Bl</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell>F</Table.ColumnHeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {statistics.map((stat) => (
-            <Table.Row key={stat.seasonId}>
-              <Table.Cell>{stat.season?.name}</Table.Cell>
-              <Table.Cell>{stat.league?.shortName}</Table.Cell>
-              <Table.Cell>{stat.team?.name || '-'}</Table.Cell>
-              <Table.Cell>{stat.gamesNumber || '-'}</Table.Cell>
-              <Table.Cell>{stat.timePlayed || '-'}</Table.Cell>
-              <Table.Cell>{stat.points || '-'}</Table.Cell>
-              <Table.Cell>{stat.eval || '-'}</Table.Cell>
-              <Table.Cell>{stat.twoPointShotsMade || '-'}</Table.Cell>
-              <Table.Cell>{stat.threePointShotsMade || '-'}</Table.Cell>
-              <Table.Cell>{stat.freeThrowsMade || '-'}</Table.Cell>
-              <Table.Cell>{stat.totalRebounds || '-'}</Table.Cell>
-              <Table.Cell>{stat.assists || '-'}</Table.Cell>
-              <Table.Cell>{stat.steals || '-'}</Table.Cell>
-              <Table.Cell>{stat.blocks || '-'}</Table.Cell>
-              <Table.Cell>{stat.turnovers || '-'}</Table.Cell>
-            </Table.Row>
-          ))}
-        </Table.Body>
-      </Table.Root>
+
+      <Separator my="4" size="4" className="!block sm:!hidden" />
+      <PlayerData player={player} className="!flex sm:!hidden" />
+      <Separator my="4" size="4" className="!block sm:!hidden" />
+
+      <Tabs.Root defaultValue="average">
+        <Tabs.List>
+          <Tabs.Trigger value="average">Średnie</Tabs.Trigger>
+          <Tabs.Trigger value="records">Rekordy</Tabs.Trigger>
+        </Tabs.List>
+
+        <Box pt="3">
+          <Tabs.Content value="average">
+            <Suspense fallback={<TablePlaceholder />}>
+              <AverageTable playerId={id} />
+            </Suspense>
+          </Tabs.Content>
+
+          <Tabs.Content value="records">
+            <Suspense fallback={<TablePlaceholder />}>
+              <RecordsTable playerId={id} />
+            </Suspense>
+          </Tabs.Content>
+        </Box>
+      </Tabs.Root>
     </div>
   );
 }

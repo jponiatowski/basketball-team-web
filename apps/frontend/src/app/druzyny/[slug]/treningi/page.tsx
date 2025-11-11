@@ -1,5 +1,5 @@
 import { Breadcrumbs } from '@/base/components/breadcrumbs';
-import { Button, Card, Separator, Table } from '@radix-ui/themes';
+import { Card, Separator, Table } from '@radix-ui/themes';
 import { getTeamPracticePageData, getTeamPracticePageSeoData } from './actions';
 import { TeamPageHeading } from '@/base/components/team-page-heading';
 import { AvatarsGroup } from './components/avatars-group';
@@ -8,7 +8,6 @@ import { Collapsible } from 'radix-ui';
 import { Fragment } from 'react';
 import Image from 'next/image';
 import { cn } from '@/base/utils';
-import { getTeamSeoData } from '../actions';
 
 export const generateMetadata = async ({
   params,
@@ -74,25 +73,23 @@ export default async function TreningiPage({
         {team?.practice?.map((practice, index) => (
           <Card key={index}>
             <Collapsible.Root className="group flex flex-col gap-2">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex flex-col justify-center gap-1">
-                  <div className="text-base font-bold">
-                    {practice.day}, {practice.details.time}
+              <Collapsible.Trigger>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex flex-col justify-center gap-1">
+                    <div className="text-base font-bold">
+                      {practice.day}, {practice.details.time}
+                    </div>
+                    <div className="text-left text-sm text-gray-600">
+                      {practice.details.place}
+                    </div>
                   </div>
-                  <div className="text-sm text-gray-600">
-                    {practice.details.place}
-                  </div>
-                </div>
 
-                <Collapsible.Trigger>
-                  <Button variant="ghost" size="1">
-                    <ChevronDown
-                      size={24}
-                      className="transition-transform duration-300 ease-in-out group-data-[state=open]:rotate-180"
-                    />
-                  </Button>
-                </Collapsible.Trigger>
-              </div>
+                  <ChevronDown
+                    size={24}
+                    className="transition-transform duration-300 ease-in-out group-data-[state=open]:rotate-180"
+                  />
+                </div>
+              </Collapsible.Trigger>
               <Collapsible.Content className="collapsible-content flex flex-col gap-2">
                 <Separator size="4" className="my-2" />
                 <div className="text-base font-bold">Trenerzy</div>

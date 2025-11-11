@@ -10,7 +10,6 @@ export const useEsorSeasons = () => {
       setLoading(true)
       const response = await fetch(`${process.env.SANITY_STUDIO_FRONTEND_URL}/api/esor/seasons`)
       const data = await response.json()
-      console.log(data)
       setSeasons(data)
     } catch (err) {
       console.error(err)

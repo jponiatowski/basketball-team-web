@@ -249,7 +249,6 @@ export const singlePostQuery = groq`*[_type == "post" && slug.current == $slug][
             lqip
           }
         },
-
       }
     }
   }

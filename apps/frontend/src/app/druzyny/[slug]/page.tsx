@@ -3,7 +3,6 @@ import { getTeamPageData, getTeamSeoData } from './actions';
 import Image from 'next/image';
 import { Breadcrumbs } from '@/base/components/breadcrumbs';
 import { Metadata, ResolvingMetadata } from 'next';
-import { Props } from 'next/dist/client/script';
 import { TeamPageHeading } from '@/base/components/team-page-heading';
 
 interface TeamPageProps {
@@ -33,7 +32,7 @@ export default async function TeamPage({ params }: TeamPageProps) {
   const team = await getTeamPageData(slug);
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 rounded-lg bg-white p-8">
       <Breadcrumbs
         items={[
           { label: 'Strona główna', href: '/' },
@@ -73,7 +72,7 @@ export default async function TeamPage({ params }: TeamPageProps) {
                   sizes="264px"
                 />
               </figure>
-              <h3 className="text-center text-xl font-bold tracking-tight text-gray-900 transition-all duration-300 ease-in-out group-hover:underline">
+              <h3 className="text-center !text-xl font-bold tracking-tight text-gray-900 transition-all duration-300 ease-in-out group-hover:underline">
                 {coach.name}
               </h3>
             </div>
@@ -101,7 +100,7 @@ export default async function TeamPage({ params }: TeamPageProps) {
                   sizes="160px"
                 />
               </figure>
-              <h3 className="text-center text-xl font-bold tracking-tight text-gray-900 transition-all duration-300 ease-in-out group-hover:underline">
+              <h3 className="text-center !text-xl font-bold tracking-tight text-gray-900 transition-all duration-300 ease-in-out group-hover:underline">
                 {player.firstName} {player.lastName}
               </h3>
             </div>

@@ -36,6 +36,12 @@
 
   --font-heading: 'Bebas Neue', sans-serif;
 
+  --breakpoint-xs: 520px;
+  --breakpoint-sm: 768px;
+  --breakpoint-md: 1024px;
+  --breakpoint-lg: 1280px;
+  --breakpoint-xl: 1640px;
+
   --color-primary-50: var(--primary-50);
   --color-primary-100: var(--primary-100);
   --color-primary-200: var(--primary-200);

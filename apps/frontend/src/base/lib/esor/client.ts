@@ -24,7 +24,11 @@ import {
   EsorTimetable,
   IEsorClient,
   IEsorTransport,
+  EsorId,
+  EsorPlayerRecords,
+  EsorRecordData,
 } from './types';
+import { calculateAge } from '@/base/utils';
 
 class EsorTransport implements IEsorTransport {
   private readonly apiKey: string;
@@ -81,6 +85,17 @@ class EsorClient implements IEsorClient {
   async getCurrentSeason(): Promise<Season> {
     const esorData = await this.transport.call<EsorSeason>('getCurrentSeason');
 
+    return {
+      id: esorData.id?.toString(),
+      name: esorData.nazwa,
+      shortName: esorData.skrocona,
+    };
+  }
+
+  async getSeason(id: EsorId) {
+    const esorData = await this.transport.call<EsorSeason>('getSeason', {
+      seasonid: id,
+    });
     return {
       id: esorData.id?.toString(),
       name: esorData.nazwa,
@@ -252,6 +267,12 @@ class EsorClient implements IEsorClient {
       firstName: esorData?.[0]?.imie,
       lastName: esorData?.[0]?.nazwisko,
       photo: esorData?.[0]?.foto,
+      number: esorData?.[0].numer,
+      position: esorData?.[0].pozycja,
+      age: calculateAge(esorData?.[0].data_urodzenia),
+      height: esorData?.[0].wzrost ? `${esorData[0].wzrost} cm` : undefined,
+      nationality:
+        esorData?.[0].obywatelstwo?.iso3 || esorData?.[0].obywatelstwo?.iso2,
     };
   }
 
@@ -262,7 +283,6 @@ class EsorClient implements IEsorClient {
         playerid: playerId,
       }
     );
-
     return esorData.map((stat) => ({
       seasonId: stat.seasonid?.toString(),
       leagueId: stat.leagueid?.toString(),
@@ -307,6 +327,83 @@ class EsorClient implements IEsorClient {
       eval: stat.Eval,
       points: stat.Pkt,
     }));
+  }
+
+  async getPlayerRecords(playerId: string) {
+    const esorData = await this.transport.call<EsorPlayerRecords>(
+      'getPlayerRecords',
+      {
+        playerid: playerId,
+      }
+    );
+
+    const getRecordData = async (record?: EsorRecordData) => {
+      if (!record) {
+        return {
+          season: '-',
+          league: '-',
+          date: '-',
+          value: '-',
+          game: '-',
+        };
+      }
+
+      const season = await this.getSeason(record.z_kim?.[0].seasonid);
+
+      return {
+        season: season.name,
+        league: record.z_kim?.[0]?.game?.liga?.nazwa,
+        date: record.z_kim?.[0]?.game?.mdata,
+        value: record.max,
+        game: `${record.z_kim?.[0].game?.k1?.nazwa} - ${record.z_kim?.[0].game?.k2?.nazwa}`,
+      };
+    };
+
+    const [
+      points,
+      assists,
+      reboundsSum,
+      reboundsOffensive,
+      reboundsDefensive,
+      steals,
+      blocks,
+      time,
+      twoPointShotsMade,
+      threePointsMade,
+      freeThrowsMade,
+      turnovers,
+      fouls,
+    ] = await Promise.all([
+      getRecordData(esorData?.Pkt),
+      getRecordData(esorData?.As),
+      getRecordData(esorData?.Sum),
+      getRecordData(esorData?.A),
+      getRecordData(esorData?.O),
+      getRecordData(esorData?.P),
+      getRecordData(esorData?.B),
+      getRecordData(esorData?.min),
+      getRecordData(esorData?.c1),
+      getRecordData(esorData?.c2),
+      getRecordData(esorData?.c3),
+      getRecordData(esorData?.S),
+      getRecordData(esorData?.F),
+    ]);
+
+    return {
+      points,
+      assists,
+      reboundsSum,
+      reboundsOffensive,
+      reboundsDefensive,
+      steals,
+      blocks,
+      time,
+      twoPointShotsMade,
+      threePointsMade,
+      freeThrowsMade,
+      turnovers,
+      fouls,
+    };
   }
 
   async getTimetable(

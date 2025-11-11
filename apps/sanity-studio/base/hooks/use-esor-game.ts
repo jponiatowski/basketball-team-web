@@ -24,7 +24,6 @@ export const useEsorGame = ({
         `${process.env.SANITY_STUDIO_FRONTEND_URL}/api/esor/games?leagueId=${leagueId}&roundId=${roundId}&groupId=${groupId}&homeTeamId=${homeTeamId}&awayTeamId=${awayTeamId}`,
       )
       const data = await response.json()
-      console.log(data)
       setGame(data)
     } catch (error) {
       console.error(error)

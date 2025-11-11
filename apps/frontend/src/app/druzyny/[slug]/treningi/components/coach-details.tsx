@@ -7,18 +7,20 @@ interface CoachDetailsProps {
   email: string;
 }
 
+const linkStyles = cn('text-sm hover:!underline', 'flex items-center gap-1');
+
 export const CoachDetails = ({ name, phone, email }: CoachDetailsProps) => {
   return (
-    <div className="flex flex-col gap-1">
-      <div className="text-sm font-bold">{name}</div>
-      <div className={cn('text-sm', 'flex items-center gap-1')}>
+    <span className="flex flex-col gap-1">
+      <span className="text-sm font-bold">{name}</span>
+      <a href={`tel:${phone}`} className={linkStyles}>
         <PhoneIcon size={12} />
         {phone}
-      </div>
-      <div className={cn('text-sm', 'flex items-center gap-1')}>
+      </a>
+      <a href={`mailto:${email}`} className={linkStyles}>
         <MailIcon size={12} />
         {email}
-      </div>
-    </div>
+      </a>
+    </span>
   );
 };
