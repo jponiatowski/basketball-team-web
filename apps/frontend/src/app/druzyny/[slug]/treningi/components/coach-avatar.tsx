@@ -1,6 +1,6 @@
 import { Image } from '@/base/types';
 import NextImage from 'next/image';
-import { Text, Tooltip } from '@radix-ui/themes';
+import { Tooltip } from '@radix-ui/themes';
 import { CoachDetails } from './coach-details';
 
 interface CoachAvatarProps {

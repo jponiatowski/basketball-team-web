@@ -70,7 +70,7 @@ export default async function TabelaPage({ params }: TablePageProps) {
                   {index + 1}
                 </Table.Cell>
                 <Table.Cell
-                  className={cn('text-left', {
+                  className={cn('text-left whitespace-nowrap', {
                     'font-semibold': item.teamId === data.team.id,
                   })}
                 >

@@ -12,12 +12,15 @@ import type {
 
 export type FunctionName =
   | 'getCurrentSeason'
+  | 'getAllSeasons'
+  | 'getSeason'
   | 'getTeamPlayers'
   | 'getTeam'
   | 'getTeams'
   | 'getLeague'
   | 'getPlayer'
   | 'getPlayerStatistics'
+  | 'getPlayerRecords'
   | 'getLeagueTable'
   | 'getAllLeagues'
   | 'getRounds'
@@ -46,9 +49,42 @@ export interface EsorPlayer {
   imie: string;
   nazwisko: string;
   foto?: string;
-  wzrost?: number;
+  wzrost?: string;
   pozycja?: string;
+  numer?: string;
+  data_urodzenia?: string;
+  obywatelstwo?: {
+    id: string;
+    iso2?: string;
+    iso3?: string;
+    nazwa?: string;
+    isonr?: string;
+  };
 }
+
+export interface EsorRecordData {
+  max: string;
+  ilerazy: number;
+  z_kim: {
+    data: string;
+    seasonid: number;
+    game: {
+      mdata: string;
+      liga: {
+        nazwa: string;
+      };
+      k1: {
+        id: number;
+        nazwa: string;
+      };
+      k2: {
+        id: number;
+        nazwa: string;
+      };
+    };
+  }[];
+}
+export type EsorPlayerRecords = Record<string, EsorRecordData>;
 
 export interface EsorPlayerStatistics {
   seasonid: EsorId;
@@ -165,6 +201,7 @@ export interface IEsorTransport {
 
 export interface IEsorClient {
   getCurrentSeason(): Promise<Season>;
+  getAllSeasons(): Promise<Season[]>;
   getTeam(
     teamId: string,
     params?: { seasonId?: string; leagueId?: string }

@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import {EsorEntity} from '../types'
 import {sortEsorEntities} from '../utils'
 
-export const useEsorRounds = (leagueId: string) => {
+export const useEsorRounds = (leagueId: string, seasonId: string) => {
   const [rounds, setRounds] = useState<EsorEntity[]>([])
   const [loadingRounds, setLoadingRounds] = useState(false)
 
@@ -15,7 +15,7 @@ export const useEsorRounds = (leagueId: string) => {
 
       setLoadingRounds(true)
       const response = await fetch(
-        `${process.env.SANITY_STUDIO_FRONTEND_URL}/api/esor/rounds?leagueId=${leagueId}`,
+        `${process.env.SANITY_STUDIO_FRONTEND_URL}/api/esor/rounds?leagueId=${leagueId}&seasonId=${seasonId}`,
       )
       const data = (await response.json()) as EsorEntity[]
       setRounds(sortEsorEntities(data))

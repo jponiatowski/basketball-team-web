@@ -126,7 +126,7 @@ export default async function TimetablePage({
                     asChild
                     className={cn('cursor-pointer', '!lg:mt-0 !mt-2', {
                       '!hidden': !item.finished,
-                      '!block': item.finished,
+                      '!flex': item.finished,
                     })}
                   >
                     <Link

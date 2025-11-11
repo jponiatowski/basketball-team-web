@@ -53,8 +53,11 @@ export interface Player {
   firstName: string;
   lastName: string;
   photo?: string;
-  height?: number;
+  height?: string;
+  age?: string | null;
   position?: string;
+  number?: string;
+  nationality?: string;
 }
 
 export interface League {
